@@ -1,0 +1,57 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: image
+
+  data:
+    mongodb:
+      uri:  mongodb://localhost:27017/mongodb
+      database: image
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 40MB
+      max-request-size: 30MB
+
+  kafka:
+    producer:
+      acks: all
+    bootstrap-servers: localhost:29092
+
+  boot:
+    admin:
+      client:
+        enabled: true
+        auto-registration: true
+        url: http://localhost:9000
+        instance:
+          name: ${spring.application.name:image}
+
+kafka:
+  host: localhost:29092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    build:
+      enabled: true
+    java:
+      enabled: true
+    process:
+      enabled: true
+
+  metrics:
+    enable:
+      jvm: true
+      system: true
+      process: true
+
+application:
+  name: Image Service
+  version: 1.0.0

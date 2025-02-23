@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+
+  market:
+    image: market:latest
+    container_name: market
+    depends_on:
+      - admin
+      - redis
+      - postgres
+    build:
+      context: ./Backend/market
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_BOOT_ADMIN_CLIENT_URL: ${SPRING_BOOT_ADMIN_CLIENT_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_HOST}
+      SERVICE_UPLOAD_URL: ${SERVICE_UPLOAD_URL}
+
+  image:
+    image: image:latest
+    container_name: image
+    depends_on:
+      - mongodb
+      - market
+    build:
+      context: ./Backend/image
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATA_MONGODB_URI: ${SPRING_DATA_MONGODB_URI}
+      SPRING_BOOT_ADMIN_CLIENT_URL: ${SPRING_BOOT_ADMIN_CLIENT_URL}
+      SPRING_DATA_MONGODB_DATABASE: ${SPRING_DATA_MONGODB_DATABASE}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_HOST}
+
+  admin:
+    image: admin:latest
+    container_name: admin
+    build:
+      context: ./Backend/admin
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.4
+    container_name: zookeeper
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "localhost", "2181"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.4
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "29092:29092"
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "localhost", "9092"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ${ZOOKEEPER_HOST}
+      KAFKA_LISTENERS: OUTSIDE://:29092,INTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: OUTSIDE://kafka:29092,INTERNAL://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: ${KAFKA_HOST}
+      KAFKA_CLUSTERS_0_ZOOKEEPER: ${ZOOKEEPER_HOST}
+
+  redis:
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+      - "27017:27017"
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+
+volumes:
+  redis:
+    driver: local
+  postgresdata:
+    driver: local
+  mongodb:
+  mongodb_config:

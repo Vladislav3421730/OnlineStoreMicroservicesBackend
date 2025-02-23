@@ -1,0 +1,18 @@
+
+spring:
+  data:
+    mongodb:
+      database: image
+
+  kafka:
+    producer:
+      acks: all
+    bootstrap-servers: localhost:29092
+
+application:
+  name: Image Service
+  version: 1.0.0
+
+kafka:
+  host: localhost:29092
+
