@@ -58,7 +58,7 @@ public class OrderController {
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", required = false) String sortBy) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "createdAt";
         Page<OrderDto> orders = orderService.findAll(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(orders);
@@ -108,7 +108,7 @@ public class OrderController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestParam(name = "email") String email) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "createdAt";
         Page<OrderDto> orders = orderService.findAllByUserEmail(email, PageRequest.of(offset, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(orders);
@@ -127,7 +127,7 @@ public class OrderController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @PathVariable Long id) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "createdAt";
         Page<OrderDto> orders = orderService.findAllByUserId(id, PageRequest.of(offset, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(orders);

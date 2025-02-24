@@ -75,7 +75,7 @@ public class UserController {
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", required = false) String sortBy) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
         Page<UserDto> users = userService.findAll(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(users);

@@ -78,7 +78,7 @@ public class ProductController {
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", required = false) String sortBy) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
         Page<ProductDto> products = productService.findAll(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(products);
@@ -159,7 +159,7 @@ public class ProductController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestBody ProductFilterDTO productFilterDTO) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
         Page<ProductDto> products = productService
                 .findAllByFilter(productFilterDTO, PageRequest.of(offset, pageSize, Sort.by(sortBy)));
@@ -178,7 +178,7 @@ public class ProductController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestParam(value = "title", required = false) String title) {
         if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
         Page<ProductDto> products = productService
                 .findAllByTitle(title, PageRequest.of(offset, pageSize, Sort.by(sortBy)));
