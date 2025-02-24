@@ -11,10 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "DTO for filtering products")
-public class ProductFilterDTO {
-
-    @Schema(description = "Sort order for the products (e.g., 'asc' or 'desc')", example = "asc")
-    private String sort;
+public class ProductFilterDto {
 
     @Schema(description = "Category to filter products by", example = "Electronics")
     private String category;

@@ -3,6 +3,7 @@ package com.example.serviceTests;
 import com.example.factory.ProductFactory;
 import com.example.market.dto.CreateProductDto;
 import com.example.market.dto.ProductDto;
+import com.example.market.dto.ProductFilterDto;
 import com.example.market.exception.ProductNotFoundException;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.mapper.ProductMapper;
@@ -52,19 +53,19 @@ public class ProductServiceTest {
 
     @BeforeAll
     static void setup() {
-        firstProduct = ProductFactory.createProduct(1L,"Test Product 1");
+        firstProduct = ProductFactory.createProduct(1L, "Test Product 1");
 
-        secondProduct = ProductFactory.createProduct(2L,"Test product 2");
+        secondProduct = ProductFactory.createProduct(2L, "Test product 2");
 
-        productDto = ProductFactory.createProductDto(1L,"Test Product 1");
+        productDto = ProductFactory.createProductDto(1L, "Test Product 1");
 
         createProductDto = new CreateProductDto();
         createProductDto.setTitle("Test Product");
         createProductDto.setDescription("Product Description");
         createProductDto.setCoast(BigDecimal.valueOf(100.0));
 
-        firstProductDto = ProductFactory.createProductDto(2L,"Product 2");
-        secondProductDto = ProductFactory.createProductDto(3L,"Product 3");
+        firstProductDto = ProductFactory.createProductDto(2L, "Product 2");
+        secondProductDto = ProductFactory.createProductDto(3L, "Product 3");
     }
 
     @Test
@@ -74,7 +75,7 @@ public class ProductServiceTest {
         when(productMapper.toNewEntity(createProductDto)).thenReturn(firstProduct);
         when(productRepository.save(firstProduct)).thenReturn(firstProduct);
 
-        productService.save(createProductDto,List.of());
+        productService.save(createProductDto, List.of());
 
         verify(productMapper).toNewEntity(createProductDto);
         verify(productRepository).save(firstProduct);
@@ -88,14 +89,15 @@ public class ProductServiceTest {
 
         List<Product> products = List.of(firstProduct, secondProduct);
         List<ProductDto> productDtos = List.of(firstProductDto, secondProductDto);
+        ProductFilterDto productFilterDto = new ProductFilterDto();
 
         Page<Product> productPage = new PageImpl<>(products, pageRequest, products.size());
-        when(productRepository.findAll(pageRequest)).thenReturn(productPage);
+        when(productRepository.findAll(productFilterDto, pageRequest)).thenReturn(productPage);
 
         when(productMapper.toDTO(firstProduct)).thenReturn(firstProductDto);
         when(productMapper.toDTO(secondProduct)).thenReturn(secondProductDto);
 
-        Page<ProductDto> result = productService.findAll(pageRequest);
+        Page<ProductDto> result = productService.findAll(productFilterDto, pageRequest);
 
         assertNotNull(result);
         assertEquals(2, result.getTotalElements());
@@ -104,7 +106,7 @@ public class ProductServiceTest {
         assertEquals("Product 2", result.getContent().get(0).getTitle());
         assertEquals("Product 3", result.getContent().get(1).getTitle());
 
-        verify(productRepository).findAll(pageRequest);
+        verify(productRepository).findAll(productFilterDto,pageRequest);
         verify(productMapper).toDTO(firstProduct);
         verify(productMapper).toDTO(firstProduct);
     }
@@ -154,7 +156,7 @@ public class ProductServiceTest {
 
         assertNotNull(updatedProduct);
         assertEquals(productDto.getId(), updatedProduct.getId());
-        assertEquals(updatedProduct.getTitle(),"New title");
+        assertEquals(updatedProduct.getTitle(), "New title");
         verify(productRepository).existsById(productDto.getId());
         verify(productMapper).toEntity(productDto);
         verify(productRepository).save(firstProduct);

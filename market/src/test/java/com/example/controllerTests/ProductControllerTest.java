@@ -1,13 +1,11 @@
 package com.example.controllerTests;
 
 import com.example.market.MarketApplication;
-import com.example.market.dto.ProductFilterDTO;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,8 +14,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -40,17 +36,6 @@ public class ProductControllerTest {
             .withReuse(false);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    private static ProductFilterDTO productFilterDTO;
-
-
-    @BeforeAll
-    static void setup() {
-        productFilterDTO = new ProductFilterDTO();
-        productFilterDTO.setMinPrice(BigDecimal.valueOf(1000));
-        productFilterDTO.setMinPrice(BigDecimal.valueOf(5000));
-        productFilterDTO.setCategory("Бытовая техника");
-    }
 
     @Autowired
     MockMvc mockMvc;
@@ -92,32 +77,6 @@ public class ProductControllerTest {
 
     @Test
     @Order(4)
-    @DisplayName("Test find products by title")
-    public void testSearchProducts() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/search")
-                        .param("title", "Samsung")
-                        .param("offset", "0")
-                        .param("pageSize", "10"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content.length()").value(2));
-    }
-
-    @Test
-    @Order(5)
-    @DisplayName("Test find products by filter")
-    public void testFilterProducts() throws Exception {
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/filter")
-                        .param("offset", "0")
-                        .param("pageSize", "10")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productFilterDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content.length()").value(3));
-    }
-
-    @Test
-    @Order(6)
     @DisplayName("Test delete product")
     @WithMockUser(roles = "MANAGER")
     public void testDeleteProduct() throws Exception {

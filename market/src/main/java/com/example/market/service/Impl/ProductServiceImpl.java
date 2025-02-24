@@ -3,7 +3,7 @@ package com.example.market.service.Impl;
 import com.example.market.dto.CreateImageDto;
 import com.example.market.dto.CreateProductDto;
 import com.example.market.dto.ProductDto;
-import com.example.market.dto.ProductFilterDTO;
+import com.example.market.dto.ProductFilterDto;
 import com.example.market.exception.ProductNotFoundException;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.mapper.ImageMapper;
@@ -66,9 +66,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> findAll(PageRequest pageRequest) {
+    public Page<ProductDto> findAll(ProductFilterDto productFilterDto, PageRequest pageRequest) {
         log.info("Fetching all products");
-        return productRepository.findAll(pageRequest)
+        return productRepository.findAll(productFilterDto, pageRequest)
                 .map(productMapper::toDTO);
     }
 
@@ -78,20 +78,6 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException(i18nUtil.getMessage(Messages.PRODUCT_ERROR_NOT_FOUND, String.valueOf(id))));
         return productMapper.toDTO(product);
-    }
-
-    @Override
-    public Page<ProductDto> findAllByTitle(String title, PageRequest pageRequest) {
-        log.info("Searching products with title: {}", title);
-        return productRepository.findAllByTitleContainingIgnoreCase(title, pageRequest)
-                .map(productMapper::toDTO);
-    }
-
-    @Override
-    public Page<ProductDto> findAllByFilter(ProductFilterDTO productFilterDTO, PageRequest pageRequest) {
-        log.info("Fetching products with filter: {}", productFilterDTO);
-        return productRepository.findAllByFilter(productFilterDTO, pageRequest)
-                .map(productMapper::toDTO);
     }
 
     @Override

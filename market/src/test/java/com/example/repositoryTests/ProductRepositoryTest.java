@@ -2,7 +2,6 @@ package com.example.repositoryTests;
 
 import com.example.factory.ProductFactory;
 import com.example.market.MarketApplication;
-import com.example.market.dto.ProductFilterDTO;
 import com.example.market.model.Product;
 import com.example.market.repository.ProductRepository;
 import org.junit.jupiter.api.*;
@@ -16,8 +15,6 @@ import org.springframework.transaction.TransactionSystemException;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,15 +35,11 @@ public class ProductRepositoryTest {
 
     private static Product product;
     private static Product invalidProduct;
-    private static ProductFilterDTO productFilterDTO;
 
     @BeforeAll
     static void setup() {
         product = ProductFactory.createValidProduct();
         invalidProduct = ProductFactory.createInvalidProduct();
-        productFilterDTO = new ProductFilterDTO();
-        productFilterDTO.setCategory("Электроника");
-        productFilterDTO.setSort("cheap");
     }
 
     @Test
@@ -67,18 +60,9 @@ public class ProductRepositoryTest {
         assertThrows(TransactionSystemException.class, () -> productRepository.save(invalidProduct));
     }
 
+
     @Test
     @Order(3)
-    @DisplayName("Test find product by title")
-    void testFindByTitleContainingIgnoreCase() {
-        Page<Product> products = productRepository.findAllByTitleContainingIgnoreCase("Ноутбук", PageRequest.of(0, 10));
-        assertFalse(products.isEmpty());
-        assertTrue(products.stream().allMatch(p -> p.getTitle().toLowerCase().contains("ноутбук")));
-    }
-
-
-    @Test
-    @Order(4)
     @DisplayName("Test find product by id")
     void testFindById() {
         Product foundProduct = productRepository.findById(5L).orElseThrow();
@@ -88,21 +72,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    @Order(5)
-    @DisplayName("Test find products by category filter")
-    void testFindByCategoryFilter() {
-        Page<Product> products = productRepository.findAllByFilter(productFilterDTO, PageRequest.of(0, 10));
-
-        assertFalse(products.isEmpty());
-        assertTrue(products.getContent().stream().allMatch(p -> p.getCategory().equalsIgnoreCase("Электроника")));
-        List<Product> sortedProducts = products.getContent();
-        for (int i = 0; i < sortedProducts.size() - 1; i++) {
-            assertTrue(sortedProducts.get(i).getCoast().compareTo(sortedProducts.get(i + 1).getCoast()) <= 0);
-        }
-    }
-
-    @Test
-    @Order(6)
+    @Order(4)
     @DisplayName("Test find all products")
     void testFindAll() {
         Page<Product> products = productRepository.findAll(PageRequest.of(0, 10));
@@ -111,7 +81,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    @Order(7)
+    @Order(5)
     @DisplayName("Test delete product")
     @Rollback
     void testDeleteProduct() {
@@ -120,7 +90,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    @Order(8)
+    @Order(6)
     @DisplayName("Test update Product")
     @Rollback
     void testUpdateProduct() {

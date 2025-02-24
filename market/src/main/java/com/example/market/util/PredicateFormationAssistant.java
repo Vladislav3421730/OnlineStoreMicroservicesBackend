@@ -1,7 +1,7 @@
 package com.example.market.util;
 
 
-import com.example.market.dto.ProductFilterDTO;
+import com.example.market.dto.ProductFilterDto;
 import com.example.market.model.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
@@ -16,7 +16,7 @@ import java.util.List;
 @UtilityClass
 public class PredicateFormationAssistant {
 
-    public List<Predicate> createFromDto(ProductFilterDTO productFilterDTO, CriteriaBuilder cb, Root<Product> root){
+    public List<Predicate> createFromDto(ProductFilterDto productFilterDTO, CriteriaBuilder cb, Root<Product> root){
         List<Predicate> predicates = new ArrayList<>();
         if(productFilterDTO.getTitle()!=null && !productFilterDTO.getTitle().isBlank()){
             log.info("filter title (allowed in search input) {} was added to predicates",productFilterDTO.getTitle());

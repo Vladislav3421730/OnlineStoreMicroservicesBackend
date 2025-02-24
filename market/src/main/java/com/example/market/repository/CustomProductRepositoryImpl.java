@@ -1,14 +1,11 @@
 package com.example.market.repository;
 
 
-import com.example.market.dto.ProductFilterDTO;
+import com.example.market.dto.ProductFilterDto;
 import com.example.market.model.Product;
 import com.example.market.util.PredicateFormationAssistant;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -29,7 +27,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
     EntityManager entityManager;
 
     @Override
-    public Page<Product> findAllByFilter(ProductFilterDTO productFilterDTO, PageRequest pageRequest) {
+    public Page<Product> findAll(ProductFilterDto productFilterDTO, PageRequest pageRequest) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Product> query = cb.createQuery(Product.class);
@@ -39,15 +37,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         if (!predicates.isEmpty()) {
             query.where(predicates.toArray(new Predicate[0]));
         }
-
-        if (productFilterDTO.getSort() != null) {
-            switch (productFilterDTO.getSort()) {
-                case "cheap" -> query.orderBy(cb.asc(root.get("coast")));
-                case "expensive" -> query.orderBy(cb.desc(root.get("coast")));
-                case "alphabet" -> query.orderBy(cb.asc(root.get("title")));
-            }
-        }
-
+        sortProducts(pageRequest, query, cb, root);
         List<Product> products = entityManager.createQuery(query)
                 .setFirstResult((int) pageRequest.getOffset())
                 .setMaxResults(pageRequest.getPageSize())
@@ -72,7 +62,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         }
     }
 
-    private int getTotalAmountByFilter(ProductFilterDTO productFilterDTO) {
+    private int getTotalAmountByFilter(ProductFilterDto productFilterDTO) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<Product> root = query.from(Product.class);
@@ -86,4 +76,19 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
                 .getSingleResult()
                 .intValue();
     }
+
+    private void sortProducts(PageRequest pageRequest, CriteriaQuery<Product> query, CriteriaBuilder cb, Root<Product> root) {
+        if (pageRequest.getSort() != null && pageRequest.getSort().isSorted()) {
+            List<Order> orders = new ArrayList<>();
+            pageRequest.getSort().forEach(order -> {
+                if (order.isAscending()) {
+                    orders.add(cb.asc(root.get(order.getProperty())));
+                } else {
+                    orders.add(cb.desc(root.get(order.getProperty())));
+                }
+            });
+            query.orderBy(orders);
+        }
+    }
+
 }

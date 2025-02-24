@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -74,13 +75,18 @@ public class ProductController {
             description = "Find all products (pagination included)"
     )
     public ResponseEntity<Page<ProductDto>> findAllProducts(
-            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
+            @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,
+            @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", required = false) String sortBy) {
-        if (offset == null) offset = 0;
+            @RequestParam(value = "sort", required = false) String sort) {
+        if (page == null) page = 0;
         if (pageSize == null) pageSize = 20;
-        if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
-        Page<ProductDto> products = productService.findAll(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
+        if (sort == null || sort.isEmpty()) sort = "id";
+        ProductFilterDto productFilterDto = new ProductFilterDto(category, minPrice, maxPrice, title);
+        Page<ProductDto> products = productService.findAll(productFilterDto, PageRequest.of(page, pageSize, Sort.by(sort)));
         return ResponseEntity.ok(products);
     }
 
@@ -145,44 +151,6 @@ public class ProductController {
     public ResponseEntity<ResponseDto> deleteProduct(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.PRODUCT_SUCCESS_DELETED, String.valueOf(id))));
-    }
-
-    @GetMapping("/filter")
-    @Operation(summary = "Find products by filters", description = "Retrieves products based on filter criteria with pagination")
-    @ApiResponse(
-            responseCode = "200",
-            description = "Find all products by filters (pagination included)"
-    )
-    public ResponseEntity<Page<ProductDto>> filterProducts(
-            @RequestParam(value = "offset", required = false) Integer offset,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", required = false) String sortBy,
-            @RequestBody ProductFilterDTO productFilterDTO) {
-        if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 20;
-        if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
-        Page<ProductDto> products = productService
-                .findAllByFilter(productFilterDTO, PageRequest.of(offset, pageSize, Sort.by(sortBy)));
-        return ResponseEntity.ok(products);
-    }
-
-    @GetMapping("/search")
-    @Operation(summary = "Search products by title", description = "Finds products by their title with pagination")
-    @ApiResponse(
-            responseCode = "200",
-            description = "Find all products by title (pagination included)"
-    )
-    public ResponseEntity<Page<ProductDto>> searchProducts(
-            @RequestParam(value = "offset", required = false) Integer offset,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", required = false) String sortBy,
-            @RequestParam(value = "title", required = false) String title) {
-        if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 20;
-        if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
-        Page<ProductDto> products = productService
-                .findAllByTitle(title, PageRequest.of(offset, pageSize, Sort.by(sortBy)));
-        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
