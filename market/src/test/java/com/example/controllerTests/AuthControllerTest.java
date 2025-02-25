@@ -190,9 +190,9 @@ public class AuthControllerTest {
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(refreshRequest)
-                .andExpect(status().isForbidden())
+                .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message", notNullValue()))
-                .andExpect(jsonPath("$.code", is(403)));
+                .andExpect(jsonPath("$.code", is(401)));
     }
 }
 

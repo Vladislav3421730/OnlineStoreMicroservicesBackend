@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,8 +84,8 @@ public class ProductController {
         if (page == null) page = 0;
         if (pageSize == null) pageSize = 20;
         if (sort == null || sort.isEmpty()) sort = "id";
-        ProductFilterDto productFilterDto = new ProductFilterDto(category, minPrice, maxPrice, title);
-        Page<ProductDto> products = productService.findAll(productFilterDto, PageRequest.of(page, pageSize, Sort.by(sort)));
+        ProductFilterDto productFilterDto = new ProductFilterDto(sort, category, minPrice, maxPrice, title);
+        Page<ProductDto> products = productService.findAll(productFilterDto, PageRequest.of(page, pageSize));
         return ResponseEntity.ok(products);
     }
 

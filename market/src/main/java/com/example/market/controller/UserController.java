@@ -71,13 +71,13 @@ public class UserController {
             description = "Find all users (pagination included)"
     )
     public ResponseEntity<Page<UserDto>> findAllUsers(
-            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", required = false) String sortBy) {
-        if (offset == null) offset = 0;
+        if (page == null) page = 0;
         if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "id";
-        Page<UserDto> users = userService.findAll(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
+        Page<UserDto> users = userService.findAll(PageRequest.of(page, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(users);
     }
 
@@ -135,7 +135,7 @@ public class UserController {
             )
     })
     public ResponseEntity<ResponseDto> bunUser(@RequestBody @Valid UserDto userDto) {
-        adminService.bun(userDto);
+        adminService.bunUser(userDto);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.USER_SUCCESS_UPDATED)));
     }
 

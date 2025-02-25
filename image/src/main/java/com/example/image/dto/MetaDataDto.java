@@ -13,5 +13,5 @@ public class MetaDataDto {
     private String type;
     private Date uploadAt;
     private Long length;
-    private int size;
+    private Integer size;
 }

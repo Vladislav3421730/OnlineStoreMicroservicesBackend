@@ -5,6 +5,7 @@ import com.example.market.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,7 +66,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RefreshTokenException.class)
     public ResponseEntity<AppErrorDto> handleRefreshTokenException(RefreshTokenException refreshTokenException) {
-        return new ResponseEntity<>(new AppErrorDto(refreshTokenException.getMessage(),403), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new AppErrorDto(refreshTokenException.getMessage(),401), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<AppErrorDto> handleDisabledException(DisabledException disabledException) {
+        return new ResponseEntity<>(new AppErrorDto(disabledException.getMessage(),403), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(FileSavingException.class)

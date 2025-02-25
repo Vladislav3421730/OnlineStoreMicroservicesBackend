@@ -1,6 +1,7 @@
 package com.example.market.dto;
 
 import com.example.market.annotation.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,8 @@ public class OrderDto {
     @Schema(description = "Unique identifier for the order", example = "1")
     private Long id;
 
-    @Schema(description = "Timestamp when the order was created", example = "2025-02-07T14:30:00")
+    @Schema(description = "Timestamp when the order was created", example = "2025:02:01 14:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy:MM:dd HH:mm")
     private LocalDateTime createdAt;
 
     @DecimalMin(value = "0.01", message = "Total price must be more or equal than 0.01")

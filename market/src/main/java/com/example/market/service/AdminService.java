@@ -4,7 +4,7 @@ import com.example.market.dto.UserDto;
 
 public interface AdminService {
 
-    void bun(UserDto userDto);
+    void bunUser(UserDto userDto);
 
     void madeManager(UserDto userDto);
 

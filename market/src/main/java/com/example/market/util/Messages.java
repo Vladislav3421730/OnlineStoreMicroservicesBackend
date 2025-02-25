@@ -29,6 +29,6 @@ public class Messages {
     public static final String USER_SUCCESS_DELETED = "user.success.deleted";
     public static final String USER_ERROR_UNAUTHENTICATED = "user.error.noUnauthenticated";
     public static final String USER_ERROR_FORBIDDEN = "user.error.forbidden";
+    public static final String USER_ERROR_BANNED = "user.error.banned";
     public static final String REFRESH_TOKEN_ERROR = "token.error";
-    public static final String IMAGE_ERROR_NOT_FOUND = "image.error";
 }

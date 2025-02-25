@@ -10,7 +10,6 @@ import com.example.market.repository.UserRepository;
 import com.example.market.service.AdminService;
 import com.example.market.service.UserService;
 import com.example.market.util.Messages;
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -32,7 +32,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void bun(UserDto userDto) {
+    public void bunUser(UserDto userDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) authentication.getPrincipal();
         if (email.equals(userDto.getEmail())) {

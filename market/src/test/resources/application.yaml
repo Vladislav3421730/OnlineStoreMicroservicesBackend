@@ -54,8 +54,9 @@ server:
   port: 8081
 
 service:
-  upload:
-    url: http://localhost:8082/upload/db
+  image:
+    upload:
+      url: http://localhost:8082/upload/db
 
 kafka:
   host: localhost:29092

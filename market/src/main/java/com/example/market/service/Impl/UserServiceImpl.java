@@ -15,7 +15,6 @@ import com.example.market.repository.UserRepository;
 import com.example.market.service.UserService;
 import com.example.market.util.MakeOrderUtils;
 import com.example.market.util.Messages;
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
     MakeOrderUtils makeOrderUtils;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto findByEmail(String email) {
         log.info("Trying find user by email {}", email);
         User user = userRepository.findByEmail(email).orElseThrow(() ->

@@ -8,6 +8,7 @@ import com.example.market.wrapper.UserDetailsWrapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +27,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(i18nUtil.getMessage(Messages.USER_ERROR_EMAIL_NOT_FOUND, email)));
-        return new UserDetailsWrapper(user);
+        UserDetailsWrapper userDetailsWrapper = new UserDetailsWrapper(user);
+        if (!userDetailsWrapper.isEnabled()) {
+            throw new DisabledException(i18nUtil.getMessage(Messages.USER_ERROR_BANNED));
+        }
+        return userDetailsWrapper;
     }
 
 }

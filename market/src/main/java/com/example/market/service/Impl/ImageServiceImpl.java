@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
 
     private final RestClient restClient;
 
-    @Value("${service.upload.url}")
+    @Value("${service.image.upload.url}")
     private String requestUrl;
 
     public void sendfile(MultipartFile multipartFile, String fileName) {

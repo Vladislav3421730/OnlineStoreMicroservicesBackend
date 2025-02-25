@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 @Schema(description = "DTO for filtering products")
 public class ProductFilterDto {
 
+    @Schema(description = "Sort order for the products (e.g., 'asc' or 'desc')", example = "asc")
+    private String sort;
+
     @Schema(description = "Category to filter products by", example = "Electronics")
     private String category;
 

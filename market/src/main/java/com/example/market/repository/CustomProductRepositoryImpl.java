@@ -14,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,6 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomProductRepositoryImpl implements CustomProductRepository {
+
+    private static final String SORT_VALUE_CHEAP = "cheap";
+    private static final String SORT_VALUE_EXPENSIVE = "expensive";
+    private static final String SORT_VALUE_ALPHABET = "alphabet";
+    private static final String SORT_FIELD_TITLE = "title";
+    private static final String SORT_FIELD_COAST = "coast";
 
     EntityManager entityManager;
 
@@ -37,7 +41,13 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         if (!predicates.isEmpty()) {
             query.where(predicates.toArray(new Predicate[0]));
         }
-        sortProducts(pageRequest, query, cb, root);
+        if (productFilterDTO.getSort() != null) {
+            switch (productFilterDTO.getSort()) {
+                case SORT_VALUE_CHEAP -> query.orderBy(cb.asc(root.get(SORT_FIELD_COAST)));
+                case SORT_VALUE_EXPENSIVE -> query.orderBy(cb.desc(root.get(SORT_FIELD_COAST)));
+                case SORT_VALUE_ALPHABET -> query.orderBy(cb.asc(root.get(SORT_FIELD_TITLE)));
+            }
+        }
         List<Product> products = entityManager.createQuery(query)
                 .setFirstResult((int) pageRequest.getOffset())
                 .setMaxResults(pageRequest.getPageSize())
@@ -77,18 +87,5 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
                 .intValue();
     }
 
-    private void sortProducts(PageRequest pageRequest, CriteriaQuery<Product> query, CriteriaBuilder cb, Root<Product> root) {
-        if (pageRequest.getSort() != null && pageRequest.getSort().isSorted()) {
-            List<Order> orders = new ArrayList<>();
-            pageRequest.getSort().forEach(order -> {
-                if (order.isAscending()) {
-                    orders.add(cb.asc(root.get(order.getProperty())));
-                } else {
-                    orders.add(cb.desc(root.get(order.getProperty())));
-                }
-            });
-            query.orderBy(orders);
-        }
-    }
 
 }
