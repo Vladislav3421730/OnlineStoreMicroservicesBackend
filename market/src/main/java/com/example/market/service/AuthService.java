@@ -10,5 +10,7 @@ public interface AuthService {
 
     UserDto registerUser(RegisterUserDto user);
 
+    void deleteRefreshToken(TokenRefreshRequestDto tokenRefreshRequestDto);
+
 
 }

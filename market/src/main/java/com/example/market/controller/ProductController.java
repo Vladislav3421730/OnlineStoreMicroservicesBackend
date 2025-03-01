@@ -60,11 +60,11 @@ public class ProductController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDto.class))
             )
     })
-    public ResponseEntity<ResponseDto> saveProduct(
+    public ResponseEntity<ProductDto> saveProduct(
             @RequestPart(value = "product") @Valid CreateProductDto createProductDto,
             @RequestPart(value = "file", required = false) List<MultipartFile> files) {
-        productService.save(createProductDto, files);
-        return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.PRODUCT_SUCCESS_SAVED)));
+        ProductDto productDto = productService.save(createProductDto, files);
+        return ResponseEntity.ok(productDto);
     }
 
     @GetMapping
@@ -118,8 +118,8 @@ public class ProductController {
                     description = "Product was updated successfully"
             )
     })
-    public ResponseEntity<ProductDto> updateProduct(@RequestBody @Valid ProductDto productDto) {
-        ProductDto updatedProductDto = productService.update(productDto);
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody @Valid UpdateProductDto updateProductDto) {
+        ProductDto updatedProductDto = productService.update(updateProductDto);
         return ResponseEntity.ok(updatedProductDto);
     }
 

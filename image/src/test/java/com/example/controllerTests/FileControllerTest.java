@@ -126,7 +126,7 @@ class FileControllerTest {
     @DisplayName("Test find all files meta")
     public void testFindAllFilesMetaData() throws Exception {
 
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("uploadDate"));
+        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by("uploadDate"));
         when(fileService.findAll(pageRequest))
                 .thenReturn(new PageImpl<>(List.of(savingMetaDataDto, metaDataDto), pageRequest, 2));
         mockMvc.perform(MockMvcRequestBuilders.get("/upload/all"))

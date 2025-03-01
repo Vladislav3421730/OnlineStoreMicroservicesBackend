@@ -23,7 +23,7 @@ public class Messages {
     public static final String CART_SUCCESS_CART_UPDATED = "cart.success.cartUpdated";
     public static final String CART_SUCCESS_CART_DELETED = "cart.success.cartDeleted";
     public static final String ORDER_SUCCESS_UPDATED = "order.success.updated";
-    public static final String PRODUCT_SUCCESS_SAVED = "product.success.saved";
+    public static final String ORDER_ERROR_CREATING="order.error.creating";
     public static final String PRODUCT_SUCCESS_DELETED = "product.success.deleted";
     public static final String USER_SUCCESS_UPDATED = "user.success.updated";
     public static final String USER_SUCCESS_DELETED = "user.success.deleted";

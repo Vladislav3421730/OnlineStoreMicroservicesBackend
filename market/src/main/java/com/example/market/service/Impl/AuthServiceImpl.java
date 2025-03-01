@@ -92,9 +92,20 @@ public class AuthServiceImpl implements AuthService {
 
         if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()) {
             log.error("Phone number {} is already in use", user.getPhoneNumber());
-            throw new RegistrationFailedException(i18nUtil.getMessage(Messages.REGISTRATION_ERROR_PHONE_EXISTS, user.getEmail()));
+            throw new RegistrationFailedException(i18nUtil.getMessage(Messages.REGISTRATION_ERROR_PHONE_EXISTS, user.getPhoneNumber()));
         }
         return userService.saveUser(user);
 
+    }
+
+    @Override
+    public void deleteRefreshToken(TokenRefreshRequestDto tokenRefreshRequestDto) {
+        log.info("delete refresh token");
+        if(!jwtRefreshTokenUtils.deleteToken(tokenRefreshRequestDto.getRefreshToken())){
+            log.error("Refresh token {} not found",tokenRefreshRequestDto.getRefreshToken());
+        }
+        else {
+            log.info("Refresh token was deleted successfully");
+        }
     }
 }

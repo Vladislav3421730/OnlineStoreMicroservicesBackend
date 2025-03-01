@@ -8,6 +8,7 @@ import com.example.market.mapper.CartMapper;
 import com.example.market.model.Cart;
 import com.example.market.repository.CartRepository;
 import com.example.market.service.CartService;
+import com.example.market.util.CheckAmount;
 import com.example.market.util.Messages;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,7 @@ public class CartServiceImpl implements CartService {
             throw new WrongIndexException(i18nUtil.getMessage(Messages.CART_ERROR_INDEX_OUT_OF_BOUNDS, String.valueOf(index)));
         }
         CartDto cart = userCarts.get(index);
-        if (cart.getAmount() + 1 > cart.getProduct().getAmount()) {
-            log.error("The quantity of goods in the basket is equal to the quantity in the warehouse, " +
-                            "it is impossible to increase the quantity of goods {}. Available quantity in warehouse: {}",
-                    cart.getProduct().getTitle(), cart.getProduct().getAmount());
+        if (CheckAmount.check(cartMapper.toEntity(cart))) {
             throw new ExceedingQuantityException(i18nUtil.getMessage(Messages.CART_ERROR_QUANTITY_EXCEEDS_STOCK,
                     cart.getProduct().getTitle(), String.valueOf(cart.getProduct().getAmount())));
         }

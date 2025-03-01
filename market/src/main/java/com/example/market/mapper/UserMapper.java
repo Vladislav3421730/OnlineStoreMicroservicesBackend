@@ -9,6 +9,7 @@ import com.example.market.model.Order;
 import com.example.market.model.User;
 import com.example.market.model.enums.Role;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
 
     OrderMapper orderMapper = Mappers.getMapper(OrderMapper.class);

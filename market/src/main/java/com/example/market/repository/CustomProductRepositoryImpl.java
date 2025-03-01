@@ -27,6 +27,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
     private static final String SORT_VALUE_ALPHABET = "alphabet";
     private static final String SORT_FIELD_TITLE = "title";
     private static final String SORT_FIELD_COAST = "coast";
+    private static final String SORT_FIELD_ID = "id";
 
     EntityManager entityManager;
 
@@ -46,6 +47,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
                 case SORT_VALUE_CHEAP -> query.orderBy(cb.asc(root.get(SORT_FIELD_COAST)));
                 case SORT_VALUE_EXPENSIVE -> query.orderBy(cb.desc(root.get(SORT_FIELD_COAST)));
                 case SORT_VALUE_ALPHABET -> query.orderBy(cb.asc(root.get(SORT_FIELD_TITLE)));
+                default ->  query.orderBy(cb.asc(root.get(SORT_FIELD_ID)));
             }
         }
         List<Product> products = entityManager.createQuery(query)

@@ -144,40 +144,6 @@ public class ProductServiceTest {
 
     @Test
     @Order(5)
-    @DisplayName("Test update product - successful")
-    void testUpdateProduct() {
-        productDto.setTitle("New title");
-        when(productRepository.existsById(productDto.getId())).thenReturn(true);
-        when(productMapper.toEntity(productDto)).thenReturn(firstProduct);
-        when(productRepository.save(firstProduct)).thenReturn(firstProduct);
-        when(productMapper.toDTO(firstProduct)).thenReturn(productDto);
-
-        ProductDto updatedProduct = productService.update(productDto);
-
-        assertNotNull(updatedProduct);
-        assertEquals(productDto.getId(), updatedProduct.getId());
-        assertEquals(updatedProduct.getTitle(), "New title");
-        verify(productRepository).existsById(productDto.getId());
-        verify(productMapper).toEntity(productDto);
-        verify(productRepository).save(firstProduct);
-    }
-
-    @Test
-    @Order(6)
-    @DisplayName("Test update product - product not found")
-    void testUpdateProductNotFound() {
-        when(productRepository.existsById(productDto.getId())).thenReturn(false);
-        when(i18nUtil.getMessage(Messages.PRODUCT_ERROR_NOT_FOUND, String.valueOf(productDto.getId())))
-                .thenReturn("Product not found");
-
-        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> productService.update(productDto));
-
-        assertEquals("Product not found", exception.getMessage());
-        verify(productRepository).existsById(productDto.getId());
-    }
-
-    @Test
-    @Order(7)
     @DisplayName("Test delete product - successful")
     void testDeleteProduct() {
         when(productRepository.existsById(firstProduct.getId())).thenReturn(true);
@@ -189,7 +155,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @Order(8)
+    @Order(6)
     @DisplayName("Test delete product - product not found")
     void testDeleteProductNotFound() {
         when(productRepository.existsById(firstProduct.getId())).thenReturn(false);

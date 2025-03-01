@@ -31,4 +31,8 @@ public class JwtRefreshTokenUtils {
         return redisTemplate.opsForValue().get(token);
     }
 
+    public boolean deleteToken(String token) {
+        return redisTemplate.delete(token);
+    }
+
 }

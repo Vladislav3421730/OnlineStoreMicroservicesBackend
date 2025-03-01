@@ -60,9 +60,11 @@ public class User {
     private Set<Role> roleSet = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
+    @OrderBy("id ASC")
     private List<Cart> carts = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("createdAt DESC")
     private List<Order> orders = new ArrayList<>();
 
     public void addCartToList(Cart cart) {

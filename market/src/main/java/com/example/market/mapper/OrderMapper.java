@@ -9,12 +9,13 @@ import com.example.market.model.User;
 import com.example.market.model.enums.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OrderMapper {
 
     OrderItemMapper orderItemMapper = Mappers.getMapper(OrderItemMapper.class);

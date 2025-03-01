@@ -7,9 +7,10 @@ import com.example.market.model.Product;
 import com.example.market.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CartMapper {
 
     ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);

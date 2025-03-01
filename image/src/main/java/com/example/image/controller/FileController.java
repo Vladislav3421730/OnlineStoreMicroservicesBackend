@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/upload")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", exposedHeaders = "*")
 @Tag(name = "File",description = "Using this controller you can download, view, delete pictures")
 @Slf4j
 public class FileController {
@@ -49,13 +50,13 @@ public class FileController {
 
     @GetMapping(value = "/all")
     public ResponseEntity<Page<MetaDataDto>> findAll(
-            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", required = false) String sortBy) {
-        if (offset == null) offset = 0;
-        if (pageSize == null) pageSize = 10;
+        if (page == null) page = 0;
+        if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "uploadDate";
-        Page<MetaDataDto> files = fileService.findAll(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
+        Page<MetaDataDto> files = fileService.findAll(PageRequest.of(page, pageSize, Sort.by(sortBy)));
         return ResponseEntity.ok(files);
     }
 

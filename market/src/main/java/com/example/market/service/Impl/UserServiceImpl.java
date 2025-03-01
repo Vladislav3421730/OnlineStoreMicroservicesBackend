@@ -1,8 +1,8 @@
 package com.example.market.service.Impl;
 
-
 import com.example.market.dto.*;
 import com.example.market.exception.EmptyCartException;
+import com.example.market.exception.ExceedingQuantityException;
 import com.example.market.exception.UserNotFoundException;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.mapper.ProductMapper;
@@ -13,6 +13,7 @@ import com.example.market.model.User;
 import com.example.market.model.enums.Role;
 import com.example.market.repository.UserRepository;
 import com.example.market.service.UserService;
+import com.example.market.util.CheckAmount;
 import com.example.market.util.MakeOrderUtils;
 import com.example.market.util.Messages;
 import lombok.AccessLevel;
@@ -79,6 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto findById(Long id) {
         log.info("Trying find user by id {}", id);
         User user = userRepository.findById(id).orElseThrow(() ->
@@ -101,7 +103,13 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(userDto);
         boolean isInCartList = user.getCarts().stream()
                 .filter(cart -> cart.getProduct().getId().equals(productDto.getId()))
-                .peek(cart -> cart.setAmount(cart.getAmount() + 1))
+                .peek(cart -> {
+                    if (CheckAmount.check(cart)) {
+                        throw new ExceedingQuantityException(i18nUtil.getMessage(Messages.CART_ERROR_QUANTITY_EXCEEDS_STOCK,
+                                cart.getProduct().getTitle(), String.valueOf(cart.getProduct().getAmount())));
+                    }
+                    cart.setAmount(cart.getAmount() + 1);
+                })
                 .findFirst()
                 .isPresent();
 
@@ -119,16 +127,30 @@ public class UserServiceImpl implements UserService {
         log.info("Making an order for user: {}", userDto.getEmail());
 
         User user = userMapper.toEntity(userDto);
-        if (user.getCarts().isEmpty()) {
-            throw new EmptyCartException(i18nUtil.getMessage(Messages.CART_ERROR_EMPTY_CART));
-        }
+        validateCart(user);
         Order order = makeOrderUtils.createOrder(orderRequestDto);
         makeOrderUtils.processAddress(user, order);
         makeOrderUtils.createOrderItems(user, order);
-
         makeOrderUtils.finalizeOrder(user, order);
         log.info("Order for user {} created successfully", userDto.getEmail());
     }
 
+    private void validateCart(User user) {
+        if (user.getCarts().isEmpty()) {
+            throw new EmptyCartException(i18nUtil.getMessage(Messages.CART_ERROR_EMPTY_CART));
+        }
+        user.getCarts().forEach(cart -> {
+            if (cart.getAmount() > cart.getProduct().getAmount()) {
+                log.info("Amount of {} in basket {} is more than available {}",
+                        cart.getProduct().getTitle(), cart.getProduct().getAmount(), cart.getAmount());
+                throw new EmptyCartException(i18nUtil.getMessage(
+                        Messages.ORDER_ERROR_CREATING,
+                        cart.getProduct().getTitle(),
+                        cart.getProduct().getAmount().toString(),
+                        String.valueOf(cart.getAmount())
+                ));
+            }
+        });
+    }
 
 }

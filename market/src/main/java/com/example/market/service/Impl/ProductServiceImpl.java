@@ -1,9 +1,6 @@
 package com.example.market.service.Impl;
 
-import com.example.market.dto.CreateImageDto;
-import com.example.market.dto.CreateProductDto;
-import com.example.market.dto.ProductDto;
-import com.example.market.dto.ProductFilterDto;
+import com.example.market.dto.*;
 import com.example.market.exception.ProductNotFoundException;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.mapper.ImageMapper;
@@ -42,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void save(CreateProductDto createProductDTO, List<MultipartFile> files) {
+    public ProductDto save(CreateProductDto createProductDTO, List<MultipartFile> files) {
         log.info("Save product {}", createProductDTO);
         Product product = productMapper.toNewEntity(createProductDTO);
 
@@ -62,7 +59,8 @@ public class ProductServiceImpl implements ProductService {
                 product.addImageToList(image);
             }
         }
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDTO(savedProduct);
     }
 
     @Override
@@ -82,13 +80,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductDto update(ProductDto productDto) {
-        if (!productRepository.existsById(productDto.getId())) {
-            log.error("Products with id {} not found", productDto.getId());
-            throw new ProductNotFoundException(i18nUtil.getMessage(Messages.PRODUCT_ERROR_NOT_FOUND, String.valueOf(productDto.getId())));
-        }
+    public ProductDto update(UpdateProductDto productDto) {
+
+        Product product = productRepository.findById(productDto.getId()).orElseThrow(() ->
+                new ProductNotFoundException(i18nUtil.getMessage(Messages.PRODUCT_ERROR_NOT_FOUND, String.valueOf(productDto.getId()))));
         log.info("Updating product with id: {}", productDto.getId());
-        Product product = productMapper.toEntity(productDto);
+
+        product.setTitle(productDto.getTitle());
+        product.setCategory(product.getCategory());
+        product.setDescription(product.getDescription());
+        product.setCoast(product.getCoast());
+        product.setAmount(productDto.getAmount());
+
         Product updatedProduct = productRepository.save(product);
         log.info("Product updated successfully with id: {}", productDto.getId());
         return productMapper.toDTO(updatedProduct);

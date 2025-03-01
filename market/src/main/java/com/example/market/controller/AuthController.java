@@ -13,10 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,5 +76,12 @@ public class AuthController {
     public ResponseEntity<JwtResponseDto> refreshToken(@RequestBody @Valid TokenRefreshRequestDto tokenRefreshRequestDto) {
         JwtResponseDto jwtResponseDto = authService.refreshToken(tokenRefreshRequestDto);
         return ResponseEntity.ok(jwtResponseDto);
+    }
+
+    @DeleteMapping("/logout")
+    @Operation(summary = "Delete refresh token", description = "Deletes the user's refresh token, thereby ending their session and preventing further use of the token for authentication.")
+    public ResponseEntity<Void> deleteToken(@RequestBody @Valid TokenRefreshRequestDto tokenRefreshRequestDto) {
+        authService.deleteRefreshToken(tokenRefreshRequestDto);
+        return ResponseEntity.noContent().build();
     }
 }

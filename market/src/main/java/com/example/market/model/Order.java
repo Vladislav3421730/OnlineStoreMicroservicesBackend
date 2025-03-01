@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "orders")
@@ -52,6 +55,7 @@ public class Order {
     @PrePersist
     void init() {
         status = Status.ACCEPTED;
-        createdAt = LocalDateTime.now();
+        ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
+        createdAt = moscowTime.toLocalDateTime();
     }
 }

@@ -6,12 +6,13 @@ import com.example.market.dto.ProductDto;
 import com.example.market.model.Image;
 import com.example.market.model.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProductMapper {
 
     ImageMapper imageMapper = Mappers.getMapper(ImageMapper.class);

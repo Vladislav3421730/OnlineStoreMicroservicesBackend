@@ -142,5 +142,6 @@ public class FileServiceImpl implements FileService {
             throw new ImageNotFoundException(String.format("image with id %s not found", id));
         }
         template.delete(new Query(Criteria.where("_id").is(id)));
+        log.info("Image with id {} was deleted successfully", id);
     }
 }

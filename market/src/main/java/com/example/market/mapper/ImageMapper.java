@@ -1,15 +1,14 @@
 package com.example.market.mapper;
 
-
 import com.example.market.dto.CreateImageDto;
 import com.example.market.dto.ImageDto;
 import com.example.market.model.Image;
 import com.example.market.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
-
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ImageMapper {
 
     @Mapping(source = "product",target = "productId")
@@ -27,6 +26,4 @@ public interface ImageMapper {
     default Product mapProductFromImageDtoToImage(Long value){
         return Product.builder().id(value).build();
     }
-
-
 }
