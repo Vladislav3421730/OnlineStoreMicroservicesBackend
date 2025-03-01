@@ -46,7 +46,7 @@ http://localhost:8081/swagger-ui/index.html
 Чтобы метрики стали доступны нужно из запустить через Docker, если вы находитесь в папке ***OnlineStoreMicroservicesBackend***, то вам нужно перейти в папку admin
 ```bash
 cd admin
-``
+```
 Затем запустить команду docker
 ```bash
 docker compose up 
