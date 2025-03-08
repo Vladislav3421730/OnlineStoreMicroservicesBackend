@@ -4,6 +4,7 @@ services:
     image: market:latest
     container_name: market
     depends_on:
+      - kafka
       - admin
       - redis
       - postgres

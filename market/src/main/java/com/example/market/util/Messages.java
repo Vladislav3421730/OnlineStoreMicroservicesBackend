@@ -18,6 +18,7 @@ public class Messages {
     public static final String CART_ERROR_EXCEEDING_QUANTITY = "cart.error.exceedingQuantity";
     public static final String CART_ERROR_NO_QUANTITY_PRODUCT = "cart.error.noQuantityProduct";
     public static final String CART_ERROR_EMPTY_CART = "cart.error.emptyCart";
+    public static final String CART_ERROR_LOW_BALANCE = "cart.error.lowBalance";
     public static final String CART_SUCCESS_ORDER_CREATED = "cart.success.orderCreated";
     public static final String CART_SUCCESS_PRODUCT_ADDED = "cart.success.productAdded";
     public static final String CART_SUCCESS_CART_UPDATED = "cart.success.cartUpdated";

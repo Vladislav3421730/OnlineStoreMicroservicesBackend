@@ -71,7 +71,8 @@ public class CartController {
         UserDto user = userService.getUser();
         BigDecimal totalPrice = BigDecimal.valueOf(orderRequest.getTotalCoast());
         if (!OrderPayingValidator.validateOrderCoast(totalPrice)) {
-            throw new PaymentFailedException(i18nUtil.getMessage(Messages.CART_ERROR_EXCEEDING_QUANTITY));
+            log.error("Paying filed for price {}", totalPrice);
+            throw new PaymentFailedException(i18nUtil.getMessage(Messages.CART_ERROR_LOW_BALANCE));
         }
         userService.makeOrder(user, orderRequest);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.CART_SUCCESS_ORDER_CREATED)));
