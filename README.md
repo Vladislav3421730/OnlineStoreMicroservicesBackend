@@ -54,7 +54,7 @@ docker compose up
 Чтобы перейти на prometheus нужно воспользоваться ***http://localhost:9090***, для перехода на Grafana I***http://localhost:9091***
 Затем нужно нажать ***Add your first datasource***. После этого нажать на Prometheus, в Connection ввести
 ```bash
-http://host.docker.internal:9091
+http://host.docker.internal:9090
 ```
 Прогартните вниз и нажмите на save and Test, если появилось зелёное окошко, то выбирайте create dashboard, затем выберите import dashboard
 В папке ***/admin/config/grafana*** содержиться файл с .json расширением, потом нажмите на три точки и edit и нажмите run query для обнолвения каждой панели
