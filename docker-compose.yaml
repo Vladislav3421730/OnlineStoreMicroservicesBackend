@@ -1,16 +1,13 @@
 services:
 
   market:
-    image: market:latest
+    image: vladislavpanasik/market:latest
     container_name: market
     depends_on:
       - kafka
       - admin
       - redis
       - postgres
-    build:
-      context: ./market
-      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     environment:
@@ -26,14 +23,11 @@ services:
 
 
   image:
-    image: image:latest
+    image: vladislavpanasik/image:latest
     container_name: image
     depends_on:
       - mongodb
       - market
-    build:
-      context: ./image
-      dockerfile: Dockerfile
     ports:
       - "8082:8082"
     environment:
@@ -44,11 +38,8 @@ services:
       KAFKA_HOST: ${KAFKA_HOST}
 
   admin:
-    image: admin:latest
+    image: vladislavpanasik/admin:latest
     container_name: admin
-    build:
-      context: ./admin
-      dockerfile: Dockerfile
     ports:
       - "9000:9000"
 
