@@ -19,6 +19,9 @@ spec:
           image: vladislavpanasik/frontend:latest
           ports:
             - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: frontend-config
 ---
 apiVersion: v1
 kind: Service
@@ -31,3 +34,14 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  REACT_APP_API_MARKET_BASE_URL: "http://localhost/api/v1"
+  REACT_APP_API_IMAGE_BASE_URL: "http://localhost/upload"
+
+
+
