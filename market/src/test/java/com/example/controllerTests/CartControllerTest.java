@@ -99,7 +99,7 @@ public class CartControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/cart/add/{id}", 1L)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cart/add/{id}", 1L)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", notNullValue()));
@@ -112,7 +112,7 @@ public class CartControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/cart/increment/{index}", 0L)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cart/increment/{index}", 0L)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", notNullValue()));
@@ -125,7 +125,7 @@ public class CartControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/cart/increment/{index}", Integer.MAX_VALUE)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cart/increment/{index}", Integer.MAX_VALUE)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", notNullValue()))
@@ -139,7 +139,7 @@ public class CartControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/cart/decrement/{index}", 0L)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cart/decrement/{index}", 0L)
 
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
@@ -153,7 +153,7 @@ public class CartControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/cart/delete/{index}", 0L)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/cart/delete/{index}", 0L)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", notNullValue()));
@@ -169,7 +169,7 @@ public class CartControllerTest {
 
             String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-            mockMvc.perform(MockMvcRequestBuilders.post("/api/cart")
+            mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cart")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(orderRequestDto))
                             .header("Authorization", "Bearer " + accessToken))
@@ -188,7 +188,7 @@ public class CartControllerTest {
 
             String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDto);
 
-            mockMvc.perform(MockMvcRequestBuilders.post("/api/cart")
+            mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cart")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(orderRequestDto))
                             .header("Authorization", "Bearer " + accessToken))

@@ -17,7 +17,7 @@ public class TokenUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String getAccessTokenFromRequest(MockMvc mockMvc, LoginUserDto loginUserDto) throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/auth/login")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginUserDto))
                 .accept(MediaType.APPLICATION_JSON);

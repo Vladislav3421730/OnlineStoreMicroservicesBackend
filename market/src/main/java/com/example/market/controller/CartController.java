@@ -30,7 +30,7 @@ import java.math.BigDecimal;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/cart")
+@RequestMapping("/api/v1/cart")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Tag(name = "Cart", description = "Endpoints for managing cart items (add, remove, update quantity, etc.)")
 @ApiResponses({

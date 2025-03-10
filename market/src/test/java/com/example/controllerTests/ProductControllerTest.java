@@ -44,7 +44,7 @@ public class ProductControllerTest {
     @Order(1)
     @DisplayName("Test find all products")
     public void testFindAllProducts() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/products")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products")
                         .param("pageSize", "15"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content.length()").value(6));
@@ -54,7 +54,7 @@ public class ProductControllerTest {
     @Order(2)
     @DisplayName("Test find product by id")
     public void testFindProductById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/{id}", 1L))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products/{id}", 1L))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
                 .andExpectAll(
@@ -69,7 +69,7 @@ public class ProductControllerTest {
     @Order(3)
     @DisplayName("Test find product by invalid id")
     public void testFindProductByInvalidId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/{id}", Long.MIN_VALUE))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products/{id}", Long.MIN_VALUE))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", notNullValue()))
                 .andExpect(jsonPath("$.code").value(404));
@@ -80,7 +80,7 @@ public class ProductControllerTest {
     @DisplayName("Test delete product")
     @WithMockUser(roles = "MANAGER")
     public void testDeleteProduct() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/products/{id}", 1L))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/products/{id}", 1L))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", notNullValue()));
     }

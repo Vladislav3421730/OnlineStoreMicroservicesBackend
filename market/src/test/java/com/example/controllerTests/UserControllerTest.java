@@ -72,7 +72,7 @@ class UserControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDtoWithAdminRole);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user")
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -85,7 +85,7 @@ class UserControllerTest {
     @DisplayName("Test find user by id")
     void testFindUserById() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 1L))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.email").value("vlad@gmail.com"));
@@ -97,7 +97,7 @@ class UserControllerTest {
     @DisplayName("Test find all users")
     void testFindAllUsers() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/all"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(4));
     }
@@ -108,7 +108,7 @@ class UserControllerTest {
     @DisplayName("Test find user by email")
     void testFindUserByEmail() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/email")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/email")
                         .param("email", "vlad@gmail.com"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -122,14 +122,14 @@ class UserControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDtoWithAdminRole);
 
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 2L)
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/{id}", 2L)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(2L))
                 .andExpect(jsonPath("$.email").value("user@gmail.com"))
                 .andReturn().getResponse().getContentAsString();
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/user/bun")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/user/bun")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(response)
                         .header("Authorization", "Bearer " + accessToken))
@@ -143,7 +143,7 @@ class UserControllerTest {
     void testDeleteUser() throws Exception {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDtoWithAdminRole);
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/delete/{id}", 2L)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/user/delete/{id}", 2L)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("User with id 2 was deleted successfully"));
@@ -155,7 +155,7 @@ class UserControllerTest {
     void testDeleteYourself() throws Exception {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDtoWithAdminRole);
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/delete/{id}", 1L)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/user/delete/{id}", 1L)
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", notNullValue()))
@@ -168,7 +168,7 @@ class UserControllerTest {
     @WithMockUser(roles = {"USER", "MANAGER"})
     void testDeleteUserWithoutRoleAdmin() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/delete/{id}", 1L))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/user/delete/{id}", 1L))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message", notNullValue()))
                 .andExpect(jsonPath("$.code", notNullValue()));

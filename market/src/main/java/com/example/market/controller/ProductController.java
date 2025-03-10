@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/products")
+@RequestMapping("/api/v1/products")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Tag(name = "Products", description = "Endpoints for managing products (find, find by id, find by filter, save, delete, edit)")
 public class ProductController {

@@ -80,7 +80,7 @@ public class AuthControllerTest {
     @DisplayName("Test login and get access and refresh tokens")
     void testCreateAuthToken() throws Exception {
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/auth/login")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginUserDto))
                 .accept(MediaType.APPLICATION_JSON);
@@ -97,7 +97,7 @@ public class AuthControllerTest {
     @DisplayName("Test login with invalid data")
     void testCreateAuthTokenWithInvalidData() throws Exception {
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/auth/login")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(invalidLoginUserDto))
                 .accept(MediaType.APPLICATION_JSON);
@@ -113,7 +113,7 @@ public class AuthControllerTest {
     @DisplayName("Test register user")
     @Rollback
     void testRegisterUser() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/auth/register")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerUserDto))
                 .accept(MediaType.APPLICATION_JSON);
@@ -134,7 +134,7 @@ public class AuthControllerTest {
     @DisplayName("Test register user with invalid data")
     @Rollback
     void testRegisterUserWithInvalidData() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/auth/register")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(invalidRegisterUserDto))
                 .accept(MediaType.APPLICATION_JSON);
@@ -149,7 +149,7 @@ public class AuthControllerTest {
     @Order(5)
     @DisplayName("Test refresh token")
     void testRefreshToken() throws Exception {
-        MockHttpServletRequestBuilder loginRequest = MockMvcRequestBuilders.post("/api/auth/login")
+        MockHttpServletRequestBuilder loginRequest = MockMvcRequestBuilders.post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginUserDto))
                 .accept(MediaType.APPLICATION_JSON);
@@ -165,7 +165,7 @@ public class AuthControllerTest {
         TokenRefreshRequestDto tokenRefreshRequestDto =
                 new TokenRefreshRequestDto(refreshToken);
 
-        MockHttpServletRequestBuilder refreshRequest = MockMvcRequestBuilders.post("/api/auth/refreshToken")
+        MockHttpServletRequestBuilder refreshRequest = MockMvcRequestBuilders.post("/api/v1/auth/refreshToken")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tokenRefreshRequestDto))
                 .accept(MediaType.APPLICATION_JSON);
@@ -184,7 +184,7 @@ public class AuthControllerTest {
         TokenRefreshRequestDto tokenRefreshRequestDto =
                 new TokenRefreshRequestDto(refreshToken);
 
-        MockHttpServletRequestBuilder refreshRequest = MockMvcRequestBuilders.post("/api/auth/refreshToken")
+        MockHttpServletRequestBuilder refreshRequest = MockMvcRequestBuilders.post("/api/v1/auth/refreshToken")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tokenRefreshRequestDto))
                 .accept(MediaType.APPLICATION_JSON);
