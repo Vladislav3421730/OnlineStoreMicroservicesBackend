@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-market
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.market }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.market }}
+    spec:
+      containers:
+        - name: {{ .Values.container.market.name }}
+          image: {{ .Values.image.market.repository }}:{{ .Values.image.market.tag }}
+          ports:
+            - containerPort: {{ .Values.container.market.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName.market }}-config
+            - secretRef:
+                name: {{ .Values.appName.market }}-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.market }}
+spec:
+  selector:
+    app: {{ .Values.appName.market }}
+  ports:
+    - protocol: {{ .Values.service.protocol }}
+      port: {{ .Values.service.market.port }}
+      targetPort: {{ .Values.service.market.targetPort }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName.market }}-config
+data:
+  SPRING_DATASOURCE_URL: "{{ .Values.configMap.market.SPRING_DATASOURCE_URL }}"
+  SPRING_DATASOURCE_USERNAME: "{{ .Values.configMap.market.SPRING_DATASOURCE_USERNAME }}"
+  SPRING_BOOT_ADMIN_CLIENT_URL: "{{ .Values.configMap.market.SPRING_BOOT_ADMIN_CLIENT_URL }}"
+  REDIS_HOST: "{{ .Values.configMap.market.REDIS_HOST }}"
+  REDIS_PORT: "{{ .Values.configMap.market.REDIS_PORT }}"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "{{ .Values.configMap.market.SPRING_KAFKA_BOOTSTRAP_SERVERS }}"
+  KAFKA_HOST: "{{ .Values.configMap.market.KAFKA_HOST }}"
+  SERVICE_IMAGE_UPLOAD_URL: "{{ .Values.configMap.market.SERVICE_IMAGE_UPLOAD_URL }}"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.appName.market }}-secrets
+stringData:
+  SPRING_DATASOURCE_PASSWORD: "{{ .Values.secret.market.SPRING_DATASOURCE_PASSWORD }}"

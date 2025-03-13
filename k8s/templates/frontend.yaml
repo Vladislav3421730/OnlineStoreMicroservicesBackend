@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-frontend
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.frontend }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.frontend }}
+    spec:
+      containers:
+        - name: {{ .Values.container.frontend.name }}
+          image: {{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}
+          ports:
+            - containerPort: {{ .Values.container.frontend.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName.frontend }}-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.frontend }}
+spec:
+  selector:
+    app: {{ .Values.appName.frontend }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.frontend.port }}
+      targetPort: {{ .Values.service.frontend.targetPort }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName.frontend }}-config
+data:
+  REACT_APP_API_MARKET_BASE_URL: "{{ .Values.configMap.frontend.REACT_APP_API_MARKET_BASE_URL }}"
+  REACT_APP_API_IMAGE_BASE_URL: "{{ .Values.configMap.frontend.REACT_APP_API_IMAGE_BASE_URL }}"

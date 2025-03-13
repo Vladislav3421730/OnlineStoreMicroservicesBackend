@@ -1,0 +1,164 @@
+image:
+  admin:
+    repository: vladislavpanasik/admin
+    tag: latest
+  frontend:
+    repository: vladislavpanasik/frontend
+    tag: latest
+  image:
+    repository: vladislavpanasik/image
+    tag: latest
+  kafkaui:
+    repository: provectuslabs/kafka-ui
+    tag: latest
+  kafka:
+    repository: confluentinc/cp-kafka
+    tag: 6.2.4
+  market:
+    repository: vladislavpanasik/market
+    tag: latest
+  mongodb:
+    repository: mongo
+    tag: latest
+  postgres:
+    repository: postgres
+    tag: latest
+  redis:
+    repository: redis
+    tag: "6.2"
+  zookeeper:
+    repository: confluentinc/cp-zookeeper
+    tag: "6.2.4"
+  pullPolicy: IfNotPresent
+
+container:
+  admin:
+    name: admin
+    port: 9000
+  frontend:
+    name: frontend
+    port: 3000
+  image:
+    name: image
+    port: 8082
+  kafkaui:
+    name: kafkaui
+    port: 8080
+  market:
+    name: market
+    port: 8081
+  mongodb:
+    name: mongodb
+    port: 27017
+  postgres:
+    name: postgres
+    port: 5432
+  redis:
+    name: redis
+    port: 6379
+  zookeeper:
+    name: zookeeper
+    port: 2181
+  kafka:
+    name: kafka
+    port: 9092
+
+
+service:
+  admin:
+    port: 9000
+    targetPort: 9000
+  frontend:
+    port: 3000
+    targetPort: 3000
+  image:
+    port: 8082
+    targetPort: 8082
+  kafkaui:
+    port: 8090
+    targetPort: 8080
+  market:
+    port: 8081
+    targetPort: 8081
+  mongodb:
+    port: 27017
+    targetPort: 27017
+  postgres:
+    port: 5432
+    targetPort: 5432
+  redis:
+    port: 6379
+    targetPort: 6379
+  zookeeper:
+    port: 2181
+    targetPort: 2181
+  protocol: TCP
+
+pv:
+  storageClassName: manual
+  capacity: 500Mi
+  accessMode: ReadWriteOnce
+  hostPath: /mnt/data
+  requestedStorage: 500Mi
+
+labels:
+  env: dev
+  owner: Panasik
+appName: 
+  admin: admin
+  frontend: frontend
+  image: image
+  kafkaui: kafkaui
+  market: market
+  mongodb: mongodb
+  postgres: postgres
+  redis: redis
+  zookeeper: zookeeper
+  kafka: kafka
+
+configMap:
+  frontend:
+    REACT_APP_API_MARKET_BASE_URL: "http://localhost/api/v1"
+    REACT_APP_API_IMAGE_BASE_URL: "http://localhost/upload"
+  image:
+    SPRING_DATA_MONGODB_URI: "mongodb://mongodb:27017/image"
+    SPRING_DATA_MONGODB_DATABASE: "image"
+    SPRING_BOOT_ADMIN_CLIENT_URL: "http://admin:9000"
+    SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:29092"
+    KAFKA_HOST: "kafka:29092"    
+  kafkaui:
+    KAFKA_CLUSTERS_0_NAME: "local"
+    KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
+    KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+  kafka:
+    KAFKA_BROKER_ID: "1"
+    KAFKA_LISTENERS: "OUTSIDE://:29092,INTERNAL://:9092"
+    KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+    KAFKA_ADVERTISED_LISTENERS: "OUTSIDE://kafka:29092,INTERNAL://kafka:9092"
+    KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT"
+    KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+    KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  market:
+    SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/market"
+    SPRING_DATASOURCE_USERNAME: "postgres"
+    SPRING_BOOT_ADMIN_CLIENT_URL: "http://admin:9000"
+    REDIS_HOST: "redis"
+    REDIS_PORT: "6379"
+    SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:29092"
+    KAFKA_HOST: "kafka:29092"
+    SERVICE_IMAGE_UPLOAD_URL: "http://image:8082/upload/db"
+  postgres:
+    POSTGRES_USER: "postgres"
+    POSTGRES_DB: "market"
+  zookeeper:
+    ZOOKEEPER_CLIENT_PORT: "2181"
+    ZOOKEEPER_TICK_TIME: "2000"
+
+secret:
+  market:
+    SPRING_DATASOURCE_PASSWORD: cG9zdGdyZXM=
+  postgres:
+    POSTGRES_PASSWORD: cG9zdGdyZXM=
+
+ingress:
+  enabled: true

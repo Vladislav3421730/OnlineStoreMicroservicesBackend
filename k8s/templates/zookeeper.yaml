@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-zookeeper
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.zookeeper }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.zookeeper }}
+    spec:
+      containers:
+        - name: {{ .Values.container.zookeeper.name }}
+          image: {{ .Values.image.zookeeper.repository }}:{{ .Values.image.zookeeper.tag }}
+          ports:
+            - containerPort: {{ .Values.container.zookeeper.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName.zookeeper }}-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.zookeeper }}
+spec:
+  selector:
+    app: {{ .Values.appName.zookeeper }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.zookeeper.port }}
+      targetPort: {{ .Values.service.zookeeper.targetPort }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName.zookeeper }}-config
+data:
+  ZOOKEEPER_CLIENT_PORT: "{{ .Values.configMap.zookeeper.ZOOKEEPER_CLIENT_PORT }}"
+  ZOOKEEPER_TICK_TIME: "{{ .Values.configMap.zookeeper.ZOOKEEPER_TICK_TIME }}"

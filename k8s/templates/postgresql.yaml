@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-postgres
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.postgres }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.postgres }}
+    spec:
+      containers:
+        - name: {{ .Values.container.postgres.name }}
+          image: {{ .Values.image.postgres.repository }}:{{ .Values.image.postgres.tag }}
+          ports:
+            - containerPort: {{ .Values.container.postgres.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName.postgres }}-config
+            - secretRef:
+                name: {{ .Values.appName.postgres }}-secrets
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: {{ .Values.appName.postgres }}-pv-claim
+      volumes:
+        - name: {{ .Values.appName.postgres }}-pv-claim
+          persistentVolumeClaim:
+            claimName: {{ .Values.appName.postgres }}-pv-claim
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Values.appName.postgres }}-pv
+  labels:
+    type: local
+spec:
+  storageClassName: {{ .Values.pv.storageClassName }}
+  capacity:
+    storage: {{ .Values.pv.capacity }}
+  accessModes:
+    - {{ .Values.pv.accessMode }}
+  hostPath:
+    path: "{{ .Values.pv.hostPath }}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: {{ .Values.appName.postgres }}
+  name: {{ .Values.appName.postgres }}-pv-claim
+spec:
+  storageClassName: {{ .Values.pv.storageClassName }}
+  accessModes:
+    - {{ .Values.pv.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.pv.requestedStorage }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.postgres }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Values.appName.postgres }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.postgres.port }}
+      targetPort: {{ .Values.service.postgres.targetPort }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName.postgres }}-config
+data:
+  POSTGRES_USER: "{{ .Values.configMap.postgres.POSTGRES_USER }}"
+  POSTGRES_DB: "{{ .Values.configMap.postgres.POSTGRES_DB }}"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.appName.postgres }}-secrets
+stringData:
+  POSTGRES_PASSWORD: "{{ .Values.secret.postgres.POSTGRES_PASSWORD }}"

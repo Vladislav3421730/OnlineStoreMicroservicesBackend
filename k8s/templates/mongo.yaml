@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mongodb
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.mongodb }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.mongodb }}
+    spec:
+      containers:
+        - name: {{ .Values.container.mongodb.name }}
+          image: {{ .Values.image.mongodb.repository }}:{{ .Values.image.mongodb.tag }}
+          ports:
+            - containerPort: {{ .Values.container.mongodb.port }}
+          volumeMounts:
+            - mountPath: /data/db
+              name: {{ .Values.appName.mongodb }}-pv-claim
+            - mountPath: /data/configdb
+              name: {{ .Values.appName.mongodb }}-pv-claim
+      volumes:
+        - name: {{ .Values.appName.mongodb }}-pv-claim
+          persistentVolumeClaim:
+            claimName: {{ .Values.appName.mongodb }}-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.mongodb }}
+  labels:
+    app: {{ .Values.appName.mongodb }}
+spec:
+  selector:
+    app: {{ .Values.appName.mongodb }}
+  ports:
+    - port: {{ .Values.service.mongodb.port }}
+      targetPort: {{ .Values.service.mongodb.targetPort }}
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Values.appName.mongodb }}-pv
+  labels:
+    type: local
+spec:
+  storageClassName: {{ .Values.pv.storageClassName }}
+  capacity:
+    storage: {{ .Values.pv.capacity }}
+  accessModes:
+    - {{ .Values.pv.accessMode }}
+  hostPath:
+    path: "{{ .Values.pv.hostPath }}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: {{ .Values.appName.mongodb }}
+  name: {{ .Values.appName.mongodb }}-pv-claim
+spec:
+  storageClassName: {{ .Values.pv.storageClassName }}
+  accessModes:
+    - {{ .Values.pv.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.pv.requestedStorage }}

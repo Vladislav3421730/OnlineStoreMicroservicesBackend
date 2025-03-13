@@ -32,22 +32,19 @@ pipeline {
                 }
             }
         }
-        stage ('Push to Docker Hub') {
+        stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-cred-panasik', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
                 }
-
                 dir('market') {
                     bat 'docker build -t vladislavpanasik/market:latest .'
                     bat 'docker push vladislavpanasik/market:latest'
                 }
-
                 dir('image') {
                     bat 'docker build -t vladislavpanasik/image:latest .'
                     bat 'docker push vladislavpanasik/image:latest'
                 }
-
                 dir('admin') {
                     bat 'docker build -t vladislavpanasik/admin:latest .'
                     bat 'docker push vladislavpanasik/admin:latest'

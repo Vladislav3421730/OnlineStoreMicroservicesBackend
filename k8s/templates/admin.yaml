@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-admin
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.admin }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.admin }}
+    spec:
+      containers:
+        - name: {{ .Values.container.admin.name }}
+          image: {{.Values.image.admin.repository}}:{{.Values.image.admin.tag}}
+          ports:
+            - containerPort: {{ .Values.container.admin.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.admin }}
+spec:
+  selector:
+    app: {{ .Values.appName.admin }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.admin.port }}
+      targetPort: {{ .Values.service.admin.targetPort }}

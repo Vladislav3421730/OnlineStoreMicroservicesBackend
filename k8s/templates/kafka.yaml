@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-kafka
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.kafka }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.kafka }}
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: {{ .Values.container.kafka.name }}
+          image: "{{ .Values.image.kafka.repository }}:{{ .Values.image.kafka.tag }}"
+          ports:
+            - containerPort: 9092
+            - containerPort: 29092
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName.kafka }}-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.kafka }}
+spec:
+  selector:
+    app: {{ .Values.appName.kafka }}
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092
+      name: kafka
+    - protocol: TCP
+      port: 29092
+      targetPort: 29092
+      name: kafka-internal
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName.kafka }}-config
+data:
+  KAFKA_BROKER_ID: "{{ .Values.configMap.kafka.KAFKA_BROKER_ID }}"
+  KAFKA_LISTENERS: "{{ .Values.configMap.kafka.KAFKA_LISTENERS }}"
+  KAFKA_ZOOKEEPER_CONNECT: "{{ .Values.configMap.kafka.KAFKA_ZOOKEEPER_CONNECT }}"
+  KAFKA_ADVERTISED_LISTENERS: "{{ .Values.configMap.kafka.KAFKA_ADVERTISED_LISTENERS }}"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "{{ .Values.configMap.kafka.KAFKA_LISTENER_SECURITY_PROTOCOL_MAP }}"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "{{ .Values.configMap.kafka.KAFKA_INTER_BROKER_LISTENER_NAME }}"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "{{ .Values.configMap.kafka.KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR }}"

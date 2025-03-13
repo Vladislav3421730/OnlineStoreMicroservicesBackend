@@ -12,18 +12,18 @@ spec:
           service:
             name: frontend
             port:
-              number: 3000
+              number: {{ .Values.service.frontend.port }}
       - pathType: Prefix
         path: "/upload"
         backend:
           service:
             name: image
             port:
-              number: 8082
+              number: {{ .Values.service.image.port }}
       - pathType: Prefix
         path: "/api/v1"
         backend:
           service:
             name: market
             port:
-              number: 8081
+              number: {{ .Values.service.market.port }}

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-kafkaui
+  labels:
+    env: {{ .Values.labels.env }}
+    owner: {{ .Values.labels.owner }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName.kafkaui }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName.kafkaui }}
+    spec:
+      containers:
+        - name: {{ .Values.container.kafkaui.name }}
+          image: {{ .Values.image.kafkaui.repository }}:{{ .Values.image.kafkaui.tag }}
+          ports:
+            - containerPort: {{ .Values.container.kafkaui.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName.kafkaui }}-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName.kafkaui }}
+spec:
+  selector:
+    app: {{ .Values.appName.kafkaui }}
+  ports:
+    - protocol: {{ .Values.service.protocol }}
+      port: {{ .Values.service.kafkaui.port }}
+      targetPort: {{ .Values.service.kafkaui.targetPort }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.appName.kafkaui }}-config
+data:
+  KAFKA_CLUSTERS_0_NAME: "{{ .Values.configMap.kafkaui.KAFKA_CLUSTERS_0_NAME }}"
+  KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "{{ .Values.configMap.kafkaui.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS }}"
+  KAFKA_CLUSTERS_0_ZOOKEEPER: "{{ .Values.configMap.kafkaui.KAFKA_CLUSTERS_0_ZOOKEEPER }}"
