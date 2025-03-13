@@ -18,8 +18,8 @@
 | Тестирование | Spring Boot Tests, Test Containers, JUnit, Mockito                     |
 | Базы данных  | PostgreSQL, MongoDB, Redis                                             |
 | Метрики      | Prometheus, Grafana, Actuator                                          |
-| Деплой       | Docker, Kubernetes, Minikube, Ingress, Helm, Jenkins                    |
-| Прочее       | ResourceBundle, MapStruct, Page, PageRequest, Swagger,                 |
+| Деплой       | Docker, Kubernetes, Minikube, Ingress, Helm, Jenkins                   |
+| Прочее       | ResourceBundle, MapStruct, Page, PageRequest, Swagger                  |
 
 ## Инструкция по запуску
 Для начала проект нужно скопировать себе локально на компьютер
