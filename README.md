@@ -18,7 +18,7 @@
 | Тестирование | Spring Boot Tests, Test Containers, JUnit, Mockito                     |
 | Базы данных  | PostgreSQL, MongoDB, Redis                                             |
 | Метрики      | Prometheus, Grafana, Actuator                                          |
-| Деплой       | Docker, Kubernetes, Minikube, Ingress, Jenkins                         |
+| Деплой       | Docker, Kubernetes, Minikube, Ingress, Helm, Jenkins                    |
 | Прочее       | ResourceBundle, MapStruct, Page, PageRequest, Swagger,                 |
 
 ## Инструкция по запуску
@@ -49,7 +49,11 @@ minikube addons enable ingress
 ```
 После этогго выполните
 ```bash
-kubectl apply -f .
+helm install release .
+```
+Далее нужно выполнить команду minikube для ingress
+```bash
+minikube tunnel
 ```
 после этого все файлы будут применены, в том числе и Frontend часть, просто перейдите на ***localhost***, и там откроется React приложение.
 ## Документация 
