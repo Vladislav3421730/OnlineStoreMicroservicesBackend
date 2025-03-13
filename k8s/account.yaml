@@ -11,7 +11,7 @@ metadata:
   namespace: default
 rules:
 - apiGroups: [""]
-  resources: ["pods", "services"]
+  resources: ["pods", "services", "secrets", "configmaps"]
   verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
 - apiGroups: ["apps"]
   resources: ["deployments"]
@@ -23,11 +23,11 @@ rules:
   resources: ["pods/log"]
   verbs: ["get", "list", "watch"]
 - apiGroups: [""]
-  resources: ["secrets", "configmaps"]
-  verbs: ["get", "create", "list", "update", "patch"]
-- apiGroups: [""]
   resources: ["persistentvolumeclaims"]
   verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["serviceaccounts", "roles", "rolebindings", "clusterrolebindings", "clusterroles"]
+  verbs: ["get", "list", "create", "update", "delete"]
 ---
 apiVersion: v1
 kind: Secret
@@ -72,3 +72,6 @@ rules:
 - apiGroups: [""]
   resources: ["persistentvolumes", "configmaps", "secrets"]
   verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["serviceaccounts", "roles", "rolebindings", "clusterrolebindings", "clusterroles"]
+  verbs: ["get", "list", "create", "update", "delete"]
