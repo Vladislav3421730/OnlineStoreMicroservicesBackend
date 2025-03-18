@@ -9,8 +9,6 @@ public interface UserService {
 
     UserDto saveUser(RegisterUserDto registerUserDto);
 
-    UserDto getUser();
-
     UserDto findByEmail(String email);
 
     UserDto findById(Long id);
@@ -20,4 +18,6 @@ public interface UserService {
     void addProductToCart(UserDto user, ProductDto product);
 
     void makeOrder(UserDto userDto, OrderRequestDto orderRequestDto);
+
+
 }

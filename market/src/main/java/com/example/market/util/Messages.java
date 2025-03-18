@@ -13,6 +13,7 @@ public class Messages {
     public static final String ORDER_ERROR_NOT_FOUND = "order.error.notFound";
     public static final String PRODUCT_ERROR_NOT_FOUND = "product.error.notFound";
     public static final String USER_ERROR_EMAIL_NOT_FOUND = "user.error.email.notFound";
+    public static final String USER_ERROR_OLD_PASSWORD = "user.error.password";
     public static final String USER_ERROR_ID_NOT_FOUND = "user.error.id.notFound";
     public static final String USER_ERROR_CONTEXT_NOT_FOUND = "user.error.contextNotFound";
     public static final String CART_ERROR_EXCEEDING_QUANTITY = "cart.error.exceedingQuantity";
@@ -27,6 +28,7 @@ public class Messages {
     public static final String ORDER_ERROR_CREATING="order.error.creating";
     public static final String PRODUCT_SUCCESS_DELETED = "product.success.deleted";
     public static final String USER_SUCCESS_UPDATED = "user.success.updated";
+    public static final String USER_SUCCESS_PASSWORD_UPDATED = "user.success.password";
     public static final String USER_SUCCESS_DELETED = "user.success.deleted";
     public static final String USER_ERROR_UNAUTHENTICATED = "user.error.noUnauthenticated";
     public static final String USER_ERROR_FORBIDDEN = "user.error.forbidden";

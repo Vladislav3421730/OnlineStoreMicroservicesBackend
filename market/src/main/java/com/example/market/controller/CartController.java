@@ -7,6 +7,7 @@ import com.example.market.exception.PaymentFailedException;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.service.CartService;
 import com.example.market.service.ProductService;
+import com.example.market.service.ProfileService;
 import com.example.market.service.UserService;
 import com.example.market.util.Messages;
 import com.example.market.util.OrderPayingValidator;
@@ -48,6 +49,7 @@ import java.math.BigDecimal;
 public class CartController {
 
     ProductService productService;
+    ProfileService profileService;
     UserService userService;
     CartService cartService;
     I18nUtil i18nUtil;
@@ -68,7 +70,7 @@ public class CartController {
     })
     public ResponseEntity<ResponseDto> makeOrder(@RequestBody @Valid OrderRequestDto orderRequest) {
         log.info("Received order request: {}", orderRequest);
-        UserDto user = userService.getUser();
+        UserDto user = profileService.getUser();
         BigDecimal totalPrice = BigDecimal.valueOf(orderRequest.getTotalCoast());
         if (!OrderPayingValidator.validateOrderCoast(totalPrice)) {
             log.error("Paying filed for price {}", totalPrice);
@@ -102,7 +104,7 @@ public class CartController {
         if (productDto.getAmount() == 0) {
             throw new NoQuantityProductException(i18nUtil.getMessage(Messages.CART_ERROR_NO_QUANTITY_PRODUCT, productDto.getTitle()));
         }
-        UserDto userDto = userService.getUser();
+        UserDto userDto = profileService.getUser();
         userService.addProductToCart(userDto, productDto);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.CART_SUCCESS_PRODUCT_ADDED, productDto.getTitle(), userDto.getEmail())));
     }
@@ -122,7 +124,7 @@ public class CartController {
             )
     })
     public ResponseEntity<ResponseDto> incrementAmountOfProduct(@PathVariable Integer index) {
-        UserDto user = userService.getUser();
+        UserDto user = profileService.getUser();
         if (!cartService.incrementAmountOfCartInBasket(user.getCarts(), index)) {
             throw new ExceedingQuantityException(i18nUtil.getMessage(Messages.CART_ERROR_EXCEEDING_QUANTITY));
         }
@@ -144,7 +146,7 @@ public class CartController {
             )
     })
     public ResponseEntity<ResponseDto> decrementAmountOfProduct(@PathVariable Integer index) {
-        UserDto user = userService.getUser();
+        UserDto user = profileService.getUser();
         cartService.decrementAmountOfCartInBasket(user.getCarts(), index);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.CART_SUCCESS_CART_UPDATED)));
     }
@@ -165,7 +167,7 @@ public class CartController {
             )
     })
     public ResponseEntity<ResponseDto> deleteProductFromCart(@PathVariable Integer index) {
-        UserDto user = userService.getUser();
+        UserDto user = profileService.getUser();
         cartService.deleteCartFromBasket(user.getCarts(), index);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.CART_SUCCESS_CART_DELETED)));
     }

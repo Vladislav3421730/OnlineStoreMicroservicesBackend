@@ -1,5 +1,6 @@
 package com.example.market.service;
 
+import com.example.market.dto.UpdateUserDto;
 import com.example.market.dto.UserDto;
 
 public interface AdminService {
@@ -9,5 +10,4 @@ public interface AdminService {
     void madeManager(UserDto userDto);
 
     void deleteById(Long id);
-
 }

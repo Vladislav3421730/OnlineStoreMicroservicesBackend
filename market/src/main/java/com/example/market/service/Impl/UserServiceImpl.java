@@ -22,12 +22,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Set;
 
 
@@ -66,17 +63,6 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(userDB);
         log.info("User {} registered successfully", userDB.getEmail());
         return userMapper.toDTO(savedUser);
-    }
-
-    @Override
-    public UserDto getUser() {
-        log.info("Trying get user by authentication in security");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String email = (String) authentication.getPrincipal();
-            return findByEmail(email);
-        }
-        throw new UserNotFoundException(i18nUtil.getMessage(Messages.USER_ERROR_CONTEXT_NOT_FOUND));
     }
 
     @Override

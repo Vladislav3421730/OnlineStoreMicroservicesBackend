@@ -1,6 +1,7 @@
 package com.example.market.controller;
 
 import com.example.market.dto.AppErrorDto;
+import com.example.market.dto.FieldErrorDto;
 import com.example.market.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,14 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException methodArgumentNotValidException) {
+    public ResponseEntity<FieldErrorDto> handleValidationExceptions(MethodArgumentNotValidException methodArgumentNotValidException) {
         Map<String, String> errors = new HashMap<>();
         methodArgumentNotValidException.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new FieldErrorDto(errors,400), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -92,4 +93,13 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(WrongPasswordException.class)
+    public ResponseEntity<AppErrorDto> handleWrongPasswordException(WrongPasswordException wrongPasswordException) {
+        return new ResponseEntity<>(new AppErrorDto(wrongPasswordException.getMessage(),400), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordsNotTheSameException.class)
+    public ResponseEntity<AppErrorDto> handlePasswordsNotTheSameException(PasswordsNotTheSameException passwordsNotTheSameException) {
+        return new ResponseEntity<>(new AppErrorDto(passwordsNotTheSameException.getMessage(),400), HttpStatus.BAD_REQUEST);
+    }
 }

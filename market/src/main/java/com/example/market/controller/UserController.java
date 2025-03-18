@@ -1,8 +1,6 @@
 package com.example.market.controller;
 
-import com.example.market.dto.AppErrorDto;
-import com.example.market.dto.ResponseDto;
-import com.example.market.dto.UserDto;
+import com.example.market.dto.*;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.service.AdminService;
 import com.example.market.service.UserService;
@@ -49,19 +47,6 @@ public class UserController {
     UserService userService;
     AdminService adminService;
     I18nUtil i18nUtil;
-
-    @GetMapping
-    @SecurityRequirement(name = "Bearer Authentication")
-    @Operation(summary = "Get current user", description = "Retrieves details of the currently authenticated user.")
-    @ApiResponse(
-            responseCode = "200",
-            description = "User was found successfully",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))
-    )
-    public ResponseEntity<UserDto> getUser() {
-        UserDto userDto = userService.getUser();
-        return ResponseEntity.ok(userDto);
-    }
 
     @GetMapping("/all")
     @SecurityRequirement(name = "Bearer Authentication")

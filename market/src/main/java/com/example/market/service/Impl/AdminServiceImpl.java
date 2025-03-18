@@ -1,5 +1,6 @@
 package com.example.market.service.Impl;
 
+import com.example.market.dto.UpdateUserDto;
 import com.example.market.dto.UserDto;
 import com.example.market.exception.UserUpdatingException;
 import com.example.market.i18n.I18nUtil;
@@ -79,5 +80,4 @@ public class AdminServiceImpl implements AdminService {
         userRepository.deleteById(id);
         log.info("User was deleted successfully");
     }
-
 }

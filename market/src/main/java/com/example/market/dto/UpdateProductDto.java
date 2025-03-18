@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class UpdateProductDto {
 
     @NotNull(message = "id must be not null")
+    @Min(value = 1, message = "id must be greater than or equal to 1")
     @Schema(description = "Unique identifier for the product", example = "1")
     private Long id;
 

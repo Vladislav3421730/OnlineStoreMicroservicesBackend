@@ -1,10 +1,7 @@
 package com.example.market.service.Impl;
 
 import com.example.market.dto.*;
-import com.example.market.exception.LoginFailedException;
-import com.example.market.exception.RefreshTokenException;
-import com.example.market.exception.RegistrationFailedException;
-import com.example.market.exception.UserNotFoundException;
+import com.example.market.exception.*;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.model.User;
 import com.example.market.repository.UserRepository;
@@ -82,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             log.error("Password mismatch for user: {}", user.getEmail());
-            throw new RegistrationFailedException(i18nUtil.getMessage(Messages.REGISTRATION_ERROR_PASSWORD_MISMATCH));
+            throw new PasswordsNotTheSameException(i18nUtil.getMessage(Messages.REGISTRATION_ERROR_PASSWORD_MISMATCH));
         }
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {

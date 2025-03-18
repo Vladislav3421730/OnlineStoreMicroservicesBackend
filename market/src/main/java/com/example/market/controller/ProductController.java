@@ -35,7 +35,6 @@ public class ProductController {
     ProductService productService;
     I18nUtil i18nUtil;
 
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Save a new product with images", description = "Creates and saves a new product in the system")
@@ -57,7 +56,7 @@ public class ProductController {
             @ApiResponse(
                     responseCode = "400",
                     description = "Error during saving product",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDto.class))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = FieldErrorDto.class))
             )
     })
     public ResponseEntity<ProductDto> saveProduct(
@@ -106,7 +105,7 @@ public class ProductController {
             @ApiResponse(
                     responseCode = "400",
                     description = "Error during updating product",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDto.class))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = FieldErrorDto.class))
             ),
             @ApiResponse(
                     responseCode = "404",
