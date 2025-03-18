@@ -3,6 +3,7 @@ package com.example.serviceTests;
 import com.example.factory.UserFactory;
 import com.example.market.dto.*;
 import com.example.market.exception.LoginFailedException;
+import com.example.market.exception.PasswordsNotTheSameException;
 import com.example.market.exception.RefreshTokenException;
 import com.example.market.exception.RegistrationFailedException;
 import com.example.market.i18n.I18nUtil;
@@ -173,7 +174,7 @@ public class AuthServiceTest {
     @DisplayName("Test register user with not same passwords")
     void testRegisterUserWithNotSamePasswords() {
         registerUserDto.setConfirmPassword("other password");
-        assertThrows(RegistrationFailedException.class, () -> authService.registerUser(registerUserDto));
+        assertThrows(PasswordsNotTheSameException.class, () -> authService.registerUser(registerUserDto));
         verifyNoInteractions(userRepository);
         verifyNoInteractions(userService);
 

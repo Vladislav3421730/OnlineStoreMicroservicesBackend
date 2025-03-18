@@ -141,7 +141,7 @@ public class AuthControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.password", notNullValue()));
+                .andExpect(jsonPath("$.errors.password", notNullValue()));
 
     }
 

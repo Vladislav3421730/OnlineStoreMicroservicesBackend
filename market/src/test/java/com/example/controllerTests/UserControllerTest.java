@@ -72,7 +72,7 @@ class UserControllerTest {
 
         String accessToken = TokenUtils.getAccessTokenFromRequest(mockMvc, loginUserDtoWithAdminRole);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/profile")
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))

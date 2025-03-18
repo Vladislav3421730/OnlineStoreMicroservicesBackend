@@ -16,8 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -52,7 +50,7 @@ public class UserServiceTest {
     private OrderMapper orderMapper;
 
     @Mock
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
 
     @InjectMocks
@@ -117,50 +115,6 @@ public class UserServiceTest {
         verify(userMapper).toNewEntity(registerUserDto);
         verify(userRepository).save(user);
         verify(userMapper).toDTO(user);
-    }
-
-    @Test
-    @Order(4)
-    @DisplayName("Test get user by authentication")
-    void testGetUser() {
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.isAuthenticated()).thenReturn(Boolean.TRUE);
-        when(authentication.getPrincipal()).thenReturn(user.getEmail());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        when(userMapper.toDTO(user)).thenReturn(userDto);
-
-        UserDto fetchedUser = userService.getUser();
-
-        assertNotNull(fetchedUser);
-        assertEquals(user.getEmail(), fetchedUser.getEmail());
-
-        verify(userRepository).findByEmail(user.getEmail());
-        verify(userMapper).toDTO(user);
-    }
-
-    @Test
-    @Order(5)
-    @DisplayName("Test get user by authentication with null authentication")
-    void testGetUserWithNullAuthentication() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-        assertThrows(UserNotFoundException.class, () -> userService.getUser());
-    }
-
-
-    @Test
-    @Order(6)
-    @DisplayName("Test get user by authentication - user not found")
-    void testGetUserUserNotFound() {
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.isAuthenticated()).thenReturn(Boolean.TRUE);
-        when(authentication.getPrincipal()).thenReturn(user.getEmail());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> userService.getUser());
-        verify(userRepository).findByEmail(user.getEmail());
     }
 
     @Test
