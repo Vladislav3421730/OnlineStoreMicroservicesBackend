@@ -45,6 +45,8 @@ public class UserDto {
     @Pattern(regexp = "^[+]375[0-9]{9}$", message = "Phone number must be in format +375XXXXXXXXX")
     private String phoneNumber;
 
+    private Boolean isLoyal;
+
     @Schema(description = "Set of roles assigned to the user", example = "[\"USER\", \"ADMIN\"]")
     private Set<String> roleSet;
 
@@ -53,4 +55,5 @@ public class UserDto {
 
     @Schema(description = "List of orders made by the user")
     private List<OrderDto> orders;
+
 }

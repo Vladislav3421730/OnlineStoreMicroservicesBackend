@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -68,6 +67,11 @@ public class MakeOrderUtils {
 
     public void finalizeOrder(User user, Order order) {
         user.getCarts().clear();
+        if (user.getIsLoyal()) {
+            BigDecimal currentPrice = order.getTotalPrice();
+            order.setTotalPrice(currentPrice.multiply(BigDecimal.valueOf(0.9)));
+        }
+        if (user.getOrders().size() > 14) user.setIsLoyal(true);
         user.addOrderToList(order);
         userRepository.save(user);
     }

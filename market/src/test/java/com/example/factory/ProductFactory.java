@@ -14,7 +14,7 @@ public class ProductFactory {
                 .description("Valid description with enough length")
                 .category("Valid Category")
                 .amount(10)
-                .coast(new BigDecimal("10.50"))
+                .price(new BigDecimal("10.50"))
                 .build();
     }
 
@@ -22,7 +22,7 @@ public class ProductFactory {
         return Product.builder()
                 .title("Valid Title")
                 .amount(10)
-                .coast(new BigDecimal("10.50"))
+                .price(new BigDecimal("10.50"))
                 .build();
     }
 
@@ -46,7 +46,7 @@ public class ProductFactory {
                 .description("Laptop with 16GB RAM")
                 .amount(5)
                 .category("Electronics")
-                .coast(BigDecimal.valueOf(200.3))
+                .price(BigDecimal.valueOf(200.3))
                 .build();
     }
 
@@ -57,7 +57,7 @@ public class ProductFactory {
                 .description("Laptop with 16GB RAM")
                 .amount(5)
                 .category("Electronics")
-                .coast(BigDecimal.valueOf(200.3))
+                .price(BigDecimal.valueOf(200.3))
                 .build();
     }
 
@@ -69,7 +69,7 @@ public class ProductFactory {
                 .description("Laptop with 16GB RAM")
                 .amount(0)
                 .category("Electronics")
-                .coast(BigDecimal.valueOf(200.3))
+                .price(BigDecimal.valueOf(200.3))
                 .build();
     }
 
@@ -77,7 +77,7 @@ public class ProductFactory {
         return CreateProductDto.builder()
                 .amount(5)
                 .category("Electronics")
-                .coast(BigDecimal.valueOf(200.3))
+                .price(BigDecimal.valueOf(200.3))
                 .build();
     }
 }

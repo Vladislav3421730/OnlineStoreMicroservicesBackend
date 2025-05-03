@@ -62,7 +62,7 @@ public class ProductServiceTest {
         createProductDto = new CreateProductDto();
         createProductDto.setTitle("Test Product");
         createProductDto.setDescription("Product Description");
-        createProductDto.setCoast(BigDecimal.valueOf(100.0));
+        createProductDto.setPrice(BigDecimal.valueOf(100.0));
 
         firstProductDto = ProductFactory.createProductDto(2L, "Product 2");
         secondProductDto = ProductFactory.createProductDto(3L, "Product 3");

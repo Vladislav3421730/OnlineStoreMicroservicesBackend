@@ -2,6 +2,7 @@ package com.example.market.service.Impl;
 
 import com.example.market.dto.UpdateUserDto;
 import com.example.market.dto.UserDto;
+import com.example.market.exception.UserNotFoundException;
 import com.example.market.exception.UserUpdatingException;
 import com.example.market.i18n.I18nUtil;
 import com.example.market.mapper.UserMapper;
@@ -79,5 +80,20 @@ public class AdminServiceImpl implements AdminService {
         log.info("Try delete user with id {}", id);
         userRepository.deleteById(id);
         log.info("User was deleted successfully");
+    }
+
+    @Override
+    @Transactional
+    public void madeLoyal(Long id) {
+        User user = userRepository.findById(id).orElseThrow(()->
+                new UserNotFoundException(i18nUtil.getMessage(Messages.USER_ERROR_ID_NOT_FOUND, id.toString())));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) authentication.getPrincipal();
+        if (email.equals(user.getEmail())) {
+            log.error("User try update himself");
+            throw new UserUpdatingException(i18nUtil.getMessage(Messages.USER_UPDATING_ERROR_CANNOT));
+        }
+        user.setIsLoyal(!user.getIsLoyal());
+        userRepository.save(user);
     }
 }

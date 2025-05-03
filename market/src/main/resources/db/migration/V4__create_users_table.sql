@@ -12,8 +12,8 @@ CREATE TABLE public.users
     password     VARCHAR(255) NOT NULL CHECK (LENGTH(password) >= 6),
     email        VARCHAR(255) UNIQUE CHECK (POSITION('@' IN email) > 1),
     is_bun       BOOLEAN      NOT NULL DEFAULT FALSE,
-    phone_number VARCHAR(13) UNIQUE CHECK (phone_number ~ '^[+]375[0-9]{9}$')
-
+    phone_number VARCHAR(13) UNIQUE CHECK (phone_number ~ '^[+]375[0-9]{9}$'),
+    is_loyal     BOOLEAN DEFAULT FALSE
 );
 
 ALTER TABLE public.users OWNER TO postgres;

@@ -87,10 +87,12 @@ public class ProductServiceImpl implements ProductService {
         log.info("Updating product with id: {}", productDto.getId());
 
         product.setTitle(productDto.getTitle());
-        product.setCategory(product.getCategory());
-        product.setDescription(product.getDescription());
-        product.setCoast(product.getCoast());
+        product.setCategory(productDto.getCategory());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
         product.setAmount(productDto.getAmount());
+        product.setDiscount(productDto.getDiscount());
+        product.setPriority(productDto.getPriority());
 
         Product updatedProduct = productRepository.save(product);
         log.info("Product updated successfully with id: {}", productDto.getId());

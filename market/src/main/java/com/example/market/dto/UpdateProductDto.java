@@ -42,5 +42,13 @@ public class UpdateProductDto {
     @Schema(description = "Cost of the product", example = "599.99", required = true)
     @DecimalMin(value = "0.01", message = "Cost must be greater than or equal to 0.01")
     @NotNull(message = "Coast is required")
-    private BigDecimal coast;
+    private BigDecimal price;
+
+    @NotNull
+    @Min(0)
+    private Integer priority;
+
+    @NotNull
+    @Min(0)
+    private Double discount;
 }

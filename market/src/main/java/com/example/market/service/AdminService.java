@@ -10,4 +10,6 @@ public interface AdminService {
     void madeManager(UserDto userDto);
 
     void deleteById(Long id);
+
+    void madeLoyal(Long id);
 }

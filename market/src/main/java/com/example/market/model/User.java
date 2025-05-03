@@ -48,6 +48,9 @@ public class User {
     @Pattern(regexp = "^[+]375[0-9]{9}$", message = "Phone number must be in format +375XXXXXXXXX")
     private String phoneNumber;
 
+    @Column(name = "is_loyal")
+    private Boolean isLoyal;
+
     @PrePersist
     private void init() {
         bun = false;
@@ -64,7 +67,7 @@ public class User {
     private List<Cart> carts = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    @OrderBy("createdAt DESC")
+    @OrderBy("createdAt ASC")
     private List<Order> orders = new ArrayList<>();
 
     public void addCartToList(Cart cart) {

@@ -6,7 +6,7 @@ VALUES
     ('Новосибирская область', 'Новосибирск', 'ул. Ленина, д. 58', '630000'),
     ('Ростовская область', 'Ростов-на-Дону', 'пр. Стачки, д. 97', '344000');
 
-INSERT INTO public.product (title, description, category, amount, coast)
+INSERT INTO public.product (title, description, category, amount, price)
 VALUES
     ('Ноутбук Lenovo', 'Мощный ноутбук с процессором Intel i7, 16GB RAM и SSD 512GB', 'Электроника', 15, 49999.99),
     ('Смартфон Samsung Galaxy', 'Смартфон с экраном 6.5 дюймов, 128GB памяти', 'Электроника', 25, 29999.50),

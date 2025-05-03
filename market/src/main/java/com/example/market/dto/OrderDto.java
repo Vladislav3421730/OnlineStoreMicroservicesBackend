@@ -26,7 +26,7 @@ public class OrderDto {
     private Long id;
 
     @Schema(description = "Timestamp when the order was created", example = "2025:02:01 14:30")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy:MM:dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime createdAt;
 
     @DecimalMin(value = "0.01", message = "Total price must be more or equal than 0.01")

@@ -23,12 +23,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Tag(name = "Order",description = "Endpoints for managing orders")
+@Tag(name = "Order", description = "Endpoints for managing orders")
 @ApiResponses({
         @ApiResponse(
                 responseCode = "401",
@@ -61,6 +63,12 @@ public class OrderController {
         if (pageSize == null) pageSize = 20;
         if (sortBy == null || sortBy.isEmpty()) sortBy = "createdAt";
         Page<OrderDto> orders = orderService.findAll(PageRequest.of(page, pageSize, Sort.by(sortBy)));
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderDto>> findAll() {
+        List<OrderDto> orders = orderService.findAll();
         return ResponseEntity.ok(orders);
     }
 

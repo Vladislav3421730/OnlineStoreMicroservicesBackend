@@ -166,5 +166,14 @@ public class UserController {
         adminService.deleteById(id);
         return ResponseEntity.ok(new ResponseDto(i18nUtil.getMessage(Messages.USER_SUCCESS_DELETED, String.valueOf(id))));
     }
+
+    @PutMapping("/loyal/{id}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDto> madeLoyalUser(@PathVariable Long id) {
+        adminService.madeLoyal(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
 

@@ -18,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -33,6 +36,13 @@ public class OrderServiceImpl implements OrderService {
         log.info("Fetching all orders");
         return orderRepository.findAll(pageRequest)
                 .map(orderMapper::toDTO);
+    }
+
+    @Override
+    public List<OrderDto> findAll() {
+        return orderRepository.findAll()
+                .stream().map(orderMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

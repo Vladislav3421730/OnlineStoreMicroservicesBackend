@@ -43,7 +43,11 @@ public class ProductDto {
     @Schema(description = "Cost of the product", example = "599.99", required = true)
     @DecimalMin(value = "0.01", message = "Cost must be greater than or equal to 0.01")
     @NotNull(message = "Coast is required")
-    private BigDecimal coast;
+    private BigDecimal price;
+
+    private Integer priority;
+
+    private Double discount;
 
     private List<ImageDto> imageList;
 }

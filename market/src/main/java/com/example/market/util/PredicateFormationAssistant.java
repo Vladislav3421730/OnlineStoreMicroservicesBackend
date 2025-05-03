@@ -28,11 +28,11 @@ public class PredicateFormationAssistant {
         }
         if(productFilterDTO.getMinPrice()!=null){
             log.info("filter minPrice {} was added to predicates",productFilterDTO.getMinPrice());
-            predicates.add(cb.greaterThanOrEqualTo(root.get("coast"),productFilterDTO.getMinPrice()));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("price"),productFilterDTO.getMinPrice()));
         }
         if(productFilterDTO.getMaxPrice()!=null){
             log.info("filter maxPrice {} was added to predicates",productFilterDTO.getMaxPrice());
-            predicates.add(cb.lessThanOrEqualTo(root.get("coast"),productFilterDTO.getMaxPrice()));
+            predicates.add(cb.lessThanOrEqualTo(root.get("price"),productFilterDTO.getMaxPrice()));
         }
         return predicates;
     }

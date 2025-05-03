@@ -7,6 +7,7 @@ public class Messages {
     public static final String REGISTRATION_ERROR_PHONE_EXISTS = "registration.error.phoneExists";
     public static final String USER_UPDATING_ERROR_CANNOT_BAN_SELF = "userUpdating.error.cannotBanSelf";
     public static final String USER_UPDATING_ERROR_CANNOT_ADD_REMOVE_ROLE_SELF = "userUpdating.error.cannotAddRemoveRoleSelf";
+    public static final String USER_UPDATING_ERROR_CANNOT = "userUpdating.error.loyal";
     public static final String USER_DELETING_ERROR_CANNOT_DELETE_SELF = "userDeleting.error.cannotDeleteSelf";
     public static final String CART_ERROR_INDEX_OUT_OF_BOUNDS = "cart.error.indexOutOfBounds";
     public static final String CART_ERROR_QUANTITY_EXCEEDS_STOCK = "cart.error.quantityExceedsStock";

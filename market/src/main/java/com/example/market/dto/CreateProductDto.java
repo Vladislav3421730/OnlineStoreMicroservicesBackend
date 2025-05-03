@@ -40,5 +40,5 @@ public class CreateProductDto {
     @Schema(description = "Cost of the product", example = "19.99")
     @DecimalMin(value = "0.01", message = "Cost must be greater than or equal to 0.01")
     @NotNull(message = "Coast is required")
-    private BigDecimal coast;
+    private BigDecimal price;
 }

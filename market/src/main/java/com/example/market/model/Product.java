@@ -1,10 +1,7 @@
 package com.example.market.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,7 +39,21 @@ public class Product {
     private Integer amount;
 
     @DecimalMin(value = "0.01", message = "Cost must be greater than or equal to 10.3")
-    private BigDecimal coast;
+    private BigDecimal price;
+
+    @NotNull
+    @Min(0)
+    private Integer priority;
+
+    @NotNull
+    @Min(0)
+    private Double discount;
+
+    @PrePersist
+    void init() {
+        priority = 0;
+        discount = 0.00;
+    }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product", orphanRemoval = true)
     @OrderBy("id ASC")
