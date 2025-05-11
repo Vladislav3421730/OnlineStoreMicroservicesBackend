@@ -27,6 +27,7 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
     private static final String SORT_VALUE_ALPHABET = "alphabet";
     private static final String SORT_FIELD_TITLE = "title";
     private static final String SORT_FIELD_PRICE = "price";
+    private static final String SORT_FIELD_PRIORITY = "priority";
     private static final String SORT_FIELD_ID = "id";
 
     EntityManager entityManager;
@@ -44,10 +45,10 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         }
         if (productFilterDTO.getSort() != null) {
             switch (productFilterDTO.getSort()) {
-                case SORT_VALUE_CHEAP -> query.orderBy(cb.asc(root.get(SORT_FIELD_PRICE)));
-                case SORT_VALUE_EXPENSIVE -> query.orderBy(cb.desc(root.get(SORT_FIELD_PRICE)));
-                case SORT_VALUE_ALPHABET -> query.orderBy(cb.asc(root.get(SORT_FIELD_TITLE)));
-                default ->  query.orderBy(cb.asc(root.get(SORT_FIELD_ID)));
+                case SORT_VALUE_CHEAP -> query.orderBy(cb.asc(root.get(SORT_FIELD_PRICE)),cb.desc(root.get(SORT_FIELD_PRIORITY)));
+                case SORT_VALUE_EXPENSIVE -> query.orderBy(cb.desc(root.get(SORT_FIELD_PRICE)), cb.desc(root.get(SORT_FIELD_PRIORITY)));
+                case SORT_VALUE_ALPHABET -> query.orderBy(cb.asc(root.get(SORT_FIELD_TITLE)), cb.desc(root.get(SORT_FIELD_PRIORITY)));
+                default ->  query.orderBy(cb.desc(root.get(SORT_FIELD_PRIORITY)), cb.desc(root.get(SORT_FIELD_ID)));
             }
         }
         List<Product> products = entityManager.createQuery(query)

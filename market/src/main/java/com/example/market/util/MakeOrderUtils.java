@@ -66,7 +66,6 @@ public class MakeOrderUtils {
     }
 
     public void finalizeOrder(User user, Order order) {
-        user.getCarts().clear();
         if (user.getIsLoyal()) {
             BigDecimal currentPrice = order.getTotalPrice();
             order.setTotalPrice(currentPrice.multiply(BigDecimal.valueOf(0.9)));

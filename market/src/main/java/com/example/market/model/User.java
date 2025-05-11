@@ -53,6 +53,7 @@ public class User {
 
     @PrePersist
     private void init() {
+        isLoyal = false;
         bun = false;
     }
 
